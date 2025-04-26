@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -25,14 +24,13 @@ model User{
   emailVerified     DateTime? // Added for verification tracking
   password          String?
   role              UserRole  @default(CUSTOMER) // Added for roles
+  image             String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
   //relations required by prisma nextauth.js
   accounts Account[]
   sessions Session[]
-
-
 }
 
 
@@ -71,3 +69,5 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+//export 
