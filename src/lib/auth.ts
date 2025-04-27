@@ -10,13 +10,14 @@ import { UserRole } from "@prisma/client"; // Import your UserRole enum
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+
   providers: [
     // Google OAuth Provider
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -32,17 +33,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         // 2. Find user
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user) return null; // User not found
-        console.log("User found:", user); 
+        console.log("User found:", user);
 
         // 3. Check if password is set (might be OAuth user)
         console.log("User password:", user.password); // Log the password for debugging
         if (!user.password) return null; // No password set for this user
 
-        //check email verification
+        //4.check email verification
         console.log("User email verified:", user.emailVerified); // Log the email verification status
         if (!user.emailVerified) return null; // Email not verified
 
-        // 4. Compare password hash
+        // 5. Compare password hash
         const isValidPassword = await bcrypt.compare(password, user.password);
         console.log("Password match:", isValidPassword); // Log the password match result
         if (!isValidPassword) return null; // Passwords don't match
@@ -57,9 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       },
     }), // End CredentialsProvider
-  
   ],
-
 
   callbacks: {
     async session({ session, user }) {
@@ -72,9 +71,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 
+  session: {
+    strategy: "database",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+
   pages: {
-    signIn: "/auth/signin", 
-    
+    signIn: "/auth/signin",
   },
 
   secret: process.env.AUTH_SECRET,
