@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner"; // Use Sonner for toasts
 import { Icons } from "../../../components/icons";
-
+//import { ThemeSwitch } from "@/components/custom/ThemeSwitch"
 // Zod schema for login form validation
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -55,11 +55,26 @@ export default function SignInPage() {
        // Clean the URL search params without reloading the page
        window.history.replaceState(null, '', '/signin'); // Adjust path if needed
     }
-    // Show success message after successful registration
-     if (searchParams?.get('registered') === 'true') {
-        toast.success("Registration Successful!", { description: "You can now log in."});
-        window.history.replaceState(null, '', '/signin'); // Adjust path if needed
-     }
+
+    //for success messages from other pages
+    const success = searchParams?.get('success');
+    if (success) {
+      //for email sent, email verified and password reset success
+      const successMessage = success === 'EmailVerified'
+        ? 'Your email has been verified. You can now log in.'
+        : success === 'PasswordReset'
+        ? 'Your password has been reset successfully. You can now log in.'
+        : success === 'EmailSent'
+        ? 'A verification email has been sent to your email address.'
+        : success === 'PasswordChanged'
+        ? 'Your password has been changed successfully.'
+        : success === 'EmailVerificationSent'
+        ? 'A verification email has been sent to your email address.'
+        : '';
+      toast.success("Success", { description: successMessage });
+      window.history.replaceState(null, '', '/signin'); // Adjust path if needed
+    }
+
   }, [searchParams]);
 
 
@@ -119,6 +134,7 @@ export default function SignInPage() {
   return (
      // Centering container
      <div className="flex justify-center items-center min-h-screen bg-muted/40 px-4 py-12">
+      
       <Card className="w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
@@ -230,17 +246,3 @@ export default function SignInPage() {
   );
 }
 
-
-// --- REMINDER: Create your Icons Component ---
-// Create src/components/icons.tsx
-// Install lucide-react: npm install lucide-react
-/*
-// Example src/components/icons.tsx:
-import { type LucideProps, Loader2, Chrome } from "lucide-react";
-
-export const Icons = {
-  spinner: (props: LucideProps) => <Loader2 className="h-4 w-4 animate-spin" {...props} />,
-  google: (props: LucideProps) => <Chrome className="h-4 w-4" {...props} />,
-  // Add other icons as needed
-};
-*/
