@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -27,7 +27,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProviderWrapper>
-            <main className="p-4">{children}</main>
+            <main className="">{children}</main>
             <SonnerToaster richColors position="top-right" />
           </SessionProviderWrapper>
         </ThemeProvider>

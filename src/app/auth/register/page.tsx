@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -37,6 +37,7 @@ import { Icons } from "../../../components/icons";
 const registerSchema = z
   .object({
     email: z.string().email({ message: "Please enter a valid email" }),
+    name: z.string().min(2), // Allow  min 2 chars
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),
@@ -53,11 +54,10 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   // State for loading indicators
-  
-    const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
-  
-    const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
 
+  const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
+
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
 
   // Next.js hooks
   const router = useRouter();
@@ -79,10 +79,70 @@ export default function RegisterPage() {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
+      name: "",
       password: "",
       confirmPassword: "",
     },
   });
+
+  //handler for "sign up button"
+  const onCredentialsSubmit = async (values:RegisterFormValues) => {
+    setIsLoadingCredentials(true);
+    //log to console
+    try {
+      console.log(JSON.stringify(form.getValues()));
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          email: values.email,
+          name: values.name,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      // Attempt to parse the response body regardless of status code
+      // This helps get error messages even on failure
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // Handle cases where the response body isn't valid JSON
+        console.error("Failed to parse response JSON:", jsonError);
+        data = { message: "Received an invalid response from the server." };
+      }
+
+      if (response.ok) {
+        // Registration successful (backend returned 201)
+        // Show success message and redirect to signin page
+        // (The backend now sends the verification email)
+        toast.success("Registration Submitted!", {
+          description:
+            data.message || "Please check your email for a verification link.",
+        });
+        // Redirect to sign-in, user needs to verify email before logging in
+        router.push("/auth/signin");
+      } else {
+        // Registration failed (backend returned 4xx or 5xx)
+        // Show the specific error message from the backend response
+        toast.error("Registration Failed", {
+          description:
+            data.message ||
+            "An error occurred. Please check your input and try again.",
+        });
+      }
+    } catch (error) {
+      // Handle network errors or other unexpected issues during fetch
+      console.error("Registration fetch error:", error);
+      toast.error("Registration Failed", {
+        description: "Could not connect to the server. Please try again later.",
+      });
+    } finally {
+      setIsLoadingCredentials(false); // Ensure loading state is reset
+    }
+  };
 
   // Handler for "Continue with Google" button click
   const handleGoogleSignIn = () => {
@@ -100,13 +160,10 @@ export default function RegisterPage() {
 
   return (
     // Centering container
-    <div className="flex justify-center items-center min-h-screen bg-muted/40 px-4 py-12">
+    <div className="flex justify-center items-center min-h-screen bg-muted/40 ">
       <Card className="w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Sign in to access your account.
-          </CardDescription>
+          <CardTitle className="text-2xl font-bold">Registration</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-6">
           {/* Credentials Form */}
@@ -125,8 +182,28 @@ export default function RegisterPage() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="you@example.com"
+                        // placeholder="user@gmail.com"
                         autoComplete="email"
+                        {...field}
+                        disabled={isLoading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* Name Field */}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="name"
+                        // placeholder="App User"
+                        autoComplete="name"
                         {...field}
                         disabled={isLoading}
                       />
@@ -147,7 +224,7 @@ export default function RegisterPage() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="••••••••"
+                        // placeholder="••••••••"
                         autoComplete="current-password"
                         {...field}
                         disabled={isLoading}
@@ -169,7 +246,7 @@ export default function RegisterPage() {
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="••••••••"
+                        // placeholder="••••••••"
                         autoComplete="current-password"
                         {...field}
                         disabled={isLoading}
@@ -217,13 +294,13 @@ export default function RegisterPage() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
               // Adjust href if your auth routes aren't under /auth/
-              href="/auth/register"
+              href="/auth/signin"
               className="font-medium text-primary hover:underline"
             >
-              Register
+              Login
             </Link>
           </p>
         </CardFooter>

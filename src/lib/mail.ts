@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   //base url in .env
-  const verificationUrl = `${process.env.NEXTAUTH_URL}/auth/verify-email?token=${token}`;
+  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${token}`;
 
   // Configure Nodemailer transport
   const transport = nodemailer.createTransport({
