@@ -10,6 +10,8 @@ import { UserRole } from "@prisma/client"; // Import your UserRole enum
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
     // Google OAuth Provider
@@ -31,7 +33,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = credentials.password as string;
 
         // 2. Find user
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.user.findUnique({ where: { email: email } });
         if (!user) return null; // User not found
         console.log("User found:", user);
 
@@ -49,39 +51,71 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!isValidPassword) return null; // Passwords don't match
 
         // 5. Return user object if valid
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          image: user.image,
-        };
+        return user;
       },
     }), // End CredentialsProvider
   ],
 
-  callbacks: {
-    async session({ session, user }) {
-      if (session.user && user) {
-        session.user.id = user.id;
-        session.user.role = user.role as UserRole;
-        session.user.image = user.image || null; // Optional image property
-      }
-      return session;
-    },
+  session: {
+    strategy: "jwt",
   },
 
-  session: {
-    strategy: "database",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-    updateAge: 24 * 60 * 60, // 24 hours
+  callbacks: {
+    // --- JWT Callback: Essential for JWT Strategy ---
+    // This callback is invoked *before* the session callback.
+    // It receives the user object from 'authorize' or the adapter on initial sign-in.
+    // Its job is to encode necessary user data into the JWT payload.
+    async jwt({ token, user, account, trigger }) {
+      console.log("[Callback: jwt] Trigger:", trigger);
+      console.log("[Callback: jwt] User received:", user); // User obj only on sign-in/sign-up
+      console.log("[Callback: jwt] Account received:", account); // Account obj only on OAuth sign-in/sign-up
+
+      // On initial sign-in (trigger is 'signIn' or 'signUp'), add custom claims to the token
+      if (user) {
+        // The user object passed contains details from authorize or adapter
+        console.log("[Callback: jwt] Adding user details to token");
+        token.id = user.id;
+        token.role = user.role; // Add role from user object
+        token.picture = user.image; // Use standard 'picture' claim for image
+        // name and email should be included by default, but ensure they are if needed
+        token.name = user.name;
+        token.email = user.email;
+      }
+      // Subsequent calls (trigger is 'update' or 'getSession') will just pass the existing token
+
+      console.log("[Callback: jwt] Returning token:", token);
+      return token; // The token object is encrypted and stored in the session cookie
+    },
+    // --- End JWT Callback ---
+
+    // --- Session Callback: Reads data FROM the JWT Token ---
+    // This callback receives the *decoded* JWT payload (in the 'token' parameter).
+    // Its job is to shape the final 'session.user' object available to the client.
+    async session({ session, token }) {
+      console.log("[Callback: session] Token object received:", token);
+
+      // Assign properties from the token to the session.user object
+      if (token && session.user) {
+        session.user.id = token.id as string; // Get ID from token
+        session.user.role = token.role as UserRole; // Get role from token
+        session.user.image = token.picture as string | null; // Get image from token's picture claim
+        session.user.name = token.name; // Get name from token
+        session.user.email = (token.email as string | null | undefined) ?? session.user.email; // Get email from token
+      } else {
+        console.log(
+          "[Callback: session] Warning: Token or session.user missing."
+        );
+      }
+      console.log("[Callback: session] Modified session:", session);
+      return session; // Return the session object for client/server use
+    },
+    // --- End Session Callback ---
   },
 
   pages: {
     signIn: "/auth/signin",
+    signOut: "/auth/signout",
   },
-
-  secret: process.env.AUTH_SECRET,
 });
 
 export { UserRole };

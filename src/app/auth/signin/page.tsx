@@ -52,7 +52,7 @@ export default function SignInPage() {
 
   // Effect to handle messages/errors passed via URL query parameters
   //eg ?error=CredentialsSignin
-  //eg ?success=EmailVerified 
+  //eg ?success=EmailVerified
   useEffect(() => {
     const error = searchParams?.get("error");
     if (error) {
@@ -120,8 +120,13 @@ export default function SignInPage() {
         });
       } else if (result?.ok) {
         // Success! Redirect to dashboard or the page the user was trying to access
-        const callbackUrl = searchParams?.get("callbackUrl") || "/dashboard";
+        // const session = await getSession();
+        // console.log("Session started:", session);
+        const callbackUrl = searchParams?.get("callbackUrl") || "/";
+        // if (session) {
         router.push(callbackUrl);
+        // }
+
         // Optionally refresh server components after login
         // router.refresh();
       } else {
