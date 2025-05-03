@@ -2,13 +2,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
+import { NextResponse, type NextRequest } from "next/server";
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
 import {
@@ -23,8 +21,7 @@ import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
-  // CardDescription,
-  CardFooter,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -34,10 +31,8 @@ import { Icons } from "../../../components/icons";
 
 // Zod schema for registration form validation
 //it will have email password, confirm password
-const registerSchema = z
+const changePasswordSchema = z
   .object({
-    email: z.string().email({ message: "Please enter a valid email" }),
-    name: z.string().min(2), // Allow  min 2 chars
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),
@@ -50,14 +45,12 @@ const registerSchema = z
   });
 
 // Infer the TypeScript type from the Zod schema
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type changePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
-export default function RegisterPage() {
-  // State for loading indicators
+export default function ResetPassword() {
+  // State
 
   const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
-
-  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
 
   // Next.js hooks
   const router = useRouter();
@@ -66,43 +59,49 @@ export default function RegisterPage() {
   // Effect to handle messages/errors passed via URL query parameters
   useEffect(() => {
     const error = searchParams?.get("error");
-    if (error === "UserNotFound"  ){
-      toast.error("User Not Found", {
-        description: "User not found. Please register.",
+    if (error) {
+      toast.error("Invalid Token", {
+        description: "Token invalid. Please try again.",
       });
-      // Clean the URL search params without reloading the page
-      window.history.replaceState(null, "", "/register"); // Adjust path if needed
-    }
-    else if (error) {
-      toast.error("Registration Failed", {
-        description: "An error occurred during registration. Please try again.",
-      });
-      // Clean the URL search params without reloading the page
       window.history.replaceState(null, "", "/register"); // Adjust path if needed
     }
   }, [searchParams]);
 
-  const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<changePasswordFormValues>({
+    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
-      email: "",
-      name: "",
       password: "",
       confirmPassword: "",
     },
   });
 
+  //get token
+  const token = searchParams.get("token");
+  if (!token) {
+    toast.error("Invalid Token", {
+      description: "Token invalid. Please try again.",
+    });
+    return;
+  }
+
   //handler for "sign up button"
-  const onCredentialsSubmit = async (values:RegisterFormValues) => {
+  const onChangePasswordSubmit = async (values: changePasswordFormValues) => {
     setIsLoadingCredentials(true);
+    //get token
+    const token = searchParams.get("token");
+    if (!token) {
+      toast.error("Invalid Token", {
+        description: "Token invalid. Please try again.",
+      });
+      return;
+    }
+
     //log to console
     try {
       console.log(JSON.stringify(form.getValues()));
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("/api/auth/resetpassword?token=$" + token, {
         method: "POST",
         body: JSON.stringify({
-          email: values.email,
-          name: values.name,
           password: values.password,
           confirmPassword: values.confirmPassword,
         }),
@@ -122,28 +121,18 @@ export default function RegisterPage() {
       }
 
       if (response.ok) {
-        // Registration successful (backend returned 201)
-        // Show success message and redirect to signin page
-        // (The backend now sends the verification email)
-        toast.success("Registration Submitted!", {
-          description:
-            data.message || "Please check your email for a verification link.",
-        });
-        // Redirect to sign-in, user needs to verify email before logging in
-        router.push("/auth/signin?success=EmailSent");
+        //change password success
+        router.push("/auth/signin?success=PasswordReset");
       } else {
-        // Registration failed (backend returned 4xx or 5xx)
         // Show the specific error message from the backend response
-        toast.error("Registration Failed", {
-          description:
-            data.message ||
-            "An error occurred. Please check your input and try again.",
+        toast.error("Password Change Failed", {
+          description: data.message || "An error occurred",
         });
       }
     } catch (error) {
       // Handle network errors or other unexpected issues during fetch
-      console.error("Registration fetch error:", error);
-      toast.error("Registration Failed", {
+      console.error("Password Change fetch error:", error);
+      toast.error("Password Change Failed", {
         description: "Could not connect to the server. Please try again later.",
       });
     } finally {
@@ -151,74 +140,26 @@ export default function RegisterPage() {
     }
   };
 
-  // Handler for "Continue with Google" button click
-  const handleGoogleSignIn = () => {
-    setIsLoadingGoogle(true);
-    // Initiate Google sign-in flow
-    // NextAuth handles the redirect loop and callback
-    signIn("google", {
-      callbackUrl: searchParams?.get("callbackUrl") || "/dashboard",
-    });
-    // No need to set loading false, page redirects
-  };
-
   // Combined loading state
-  const isLoading = isLoadingCredentials || isLoadingGoogle;
+  const isLoading = isLoadingCredentials;
 
   return (
     // Centering container
     <div className="flex justify-center items-center min-h-screen bg-muted/40 ">
       <Card className="w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold">Registration</CardTitle>
+          <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
+          <CardDescription className="text-sm text-muted-foreground">
+            Please enter your new password.
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
           {/* Credentials Form */}
           <Form {...form}>
             <form
-              onSubmit={form.handleSubmit(onCredentialsSubmit)}
+              onSubmit={form.handleSubmit(onChangePasswordSubmit)}
               className="grid gap-4"
             >
-              {/* Email Field */}
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        // placeholder="user@gmail.com"
-                        autoComplete="email"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Name Field */}
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="name"
-                        // placeholder="App User"
-                        autoComplete="name"
-                        {...field}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               {/* Password Field */}
               <FormField
                 control={form.control}
@@ -226,7 +167,7 @@ export default function RegisterPage() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex justify-between items-baseline">
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>New Password</FormLabel>
                     </div>
                     <FormControl>
                       <Input
@@ -267,50 +208,11 @@ export default function RegisterPage() {
                 {isLoadingCredentials && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Register
+                Change Password
               </Button>
             </form>
           </Form>
-
-          {/* Separator */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                Or continue with Google
-              </span>
-            </div>
-          </div>
-
-          {/* Google Sign In Button */}
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleGoogleSignIn}
-            disabled={isLoading}
-          >
-            {isLoadingGoogle ? (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Icons.google className="mr-2 h-4 w-4" />
-            )}
-            Continue with Google
-          </Button>
         </CardContent>
-        <CardFooter className="flex justify-center">
-          <p className="text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              // Adjust href if your auth routes aren't under /auth/
-              href="/auth/signin"
-              className="font-medium text-primary hover:underline"
-            >
-              Login
-            </Link>
-          </p>
-        </CardFooter>
       </Card>
     </div>
   );

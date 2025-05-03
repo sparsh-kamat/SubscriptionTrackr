@@ -88,7 +88,12 @@ export default function SignInPage() {
           ? "Your password has been changed successfully."
           : success === "EmailVerificationSent"
           ? "A verification email has been sent to your email address."
+          : success === "PasswordReset"
+          ? "Password Reset Successful"
+          : success === "ResetPasswordEmailSent"
+          ? "Password Reset Email Sent"
           : "";
+
       toast.success("Success", { description: successMessage });
       window.history.replaceState(null, "", "/auth/signin"); // Adjust path if needed
     }
@@ -153,7 +158,7 @@ export default function SignInPage() {
     // NextAuth handles the redirect loop and callback
     signIn("google", {
       callbackUrl: searchParams?.get("callbackUrl") || "/dashboard",
-    });
+    });                                                             
     // No need to set loading false, page redirects
   };
 
@@ -235,7 +240,7 @@ export default function SignInPage() {
                       {/* Forgot Password Link */}
                       <Link
                         // Adjust href if your auth routes aren't under /auth/
-                        href="/auth/forgot-password"
+                        href={"/auth/confirmemail"}
                         className="text-sm font-medium text-primary hover:underline"
                         tabIndex={-1}
                       >
