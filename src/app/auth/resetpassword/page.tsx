@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { NextResponse, type NextRequest } from "next/server";
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
 import {
@@ -99,7 +98,7 @@ export default function ResetPassword() {
     //log to console
     try {
       console.log(JSON.stringify(form.getValues()));
-      const response = await fetch("/api/auth/resetpassword?token=$" + token, {
+      const response = await fetch("/api/auth/resetpassword?token=" + token, {
         method: "POST",
         body: JSON.stringify({
           password: values.password,
@@ -109,25 +108,23 @@ export default function ResetPassword() {
           "Content-Type": "application/json",
         },
       });
-      // Attempt to parse the response body regardless of status code
-      // This helps get error messages even on failure
-      let data;
-      try {
-        data = await response.json();
-      } catch (jsonError) {
-        // Handle cases where the response body isn't valid JSON
-        console.error("Failed to parse response JSON:", jsonError);
-        data = { message: "Received an invalid response from the server." };
-      }
 
+      // Handle the response
       if (response.ok) {
-        //change password success
-        router.push("/auth/signin?success=PasswordReset");
-      } else {
-        // Show the specific error message from the backend response
-        toast.error("Password Change Failed", {
-          description: data.message || "An error occurred",
+        const data = await response.json();
+        console.log("Password changed successfully:", data);
+        toast.success("Password Changed Successfully", {
+          description: "You can now log in with your new password.",
         });
+        router.push("/auth/signin");
+      } else {
+        const errorData = await response.json();
+        console.error("Error changing password:", errorData);
+        toast.error("Password Change Failed", {
+          description: errorData.error || "An error occurred. Please try again.",
+        });
+      
+      
       }
     } catch (error) {
       // Handle network errors or other unexpected issues during fetch

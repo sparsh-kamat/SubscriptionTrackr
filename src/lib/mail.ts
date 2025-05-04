@@ -42,7 +42,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 //reset password email
 export const sendResetPasswordEmail = async (email: string, token: string) => {
   //base url in .env
-  const resetPasswordLink = `${process.env.NEXTAUTH_URL}/api/auth/resetpassword?token=${token}`;
+  const resetPasswordLink = `${process.env.NEXTAUTH_URL}/auth/resetpassword?token=${token}`;
 
   // Configure Nodemailer transport
   const transport = nodemailer.createTransport({

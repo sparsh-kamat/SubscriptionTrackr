@@ -95,7 +95,10 @@ export default function ResetPassword() {
 
       if (response.ok) {
         //change password success
-        router.push("/auth/signin?success=ResetPasswordEmailSent");
+        toast.success("Password reset link sent", {
+          description: "Check your email for the instructions to reset your password.",
+        });
+        router.push("/auth/signin");
       } else {
         // Show the specific error message from the backend response
         toast.error("Password Change Failed", {

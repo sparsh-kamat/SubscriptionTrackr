@@ -84,14 +84,8 @@ export default function SignInPage() {
           ? "Your password has been reset successfully. You can now log in."
           : success === "EmailSent"
           ? "A verification email has been sent to your email address."
-          : success === "PasswordChanged"
-          ? "Your password has been changed successfully."
           : success === "EmailVerificationSent"
           ? "A verification email has been sent to your email address."
-          : success === "PasswordReset"
-          ? "Password Reset Successful"
-          : success === "ResetPasswordEmailSent"
-          ? "Password Reset Email Sent"
           : "";
 
       toast.success("Success", { description: successMessage });

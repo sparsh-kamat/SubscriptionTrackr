@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const token = searchParams.get("token");
 
+    console.log("Token from URL: ", token);
+
     // Parse the request body
     const body = await request.json();
     //validate using zod
@@ -52,9 +54,10 @@ export async function POST(request: NextRequest) {
     if (!token) {
         console.error("Token is missing");
         // You might want a dedicated error page, but redirecting to signin is common
-        return NextResponse.redirect(
-            new URL("/auth/signin?error=MissingToken", request.nextUrl.origin)
-        );
+        return NextResponse.json(
+            { error: "Token is missing" },
+            { status: 400 }
+        )
     }
 
     try {
@@ -62,18 +65,20 @@ export async function POST(request: NextRequest) {
         const existingToken = await getVerificationTokenByToken(token);
         if (!existingToken) {
             console.error("Token not found");
-            return NextResponse.redirect(
-                new URL("/auth/signin?error=InvalidToken", request.nextUrl.origin)
-            );
+            return NextResponse.json(
+                { error: "Token not found" },
+                { status: 404 }
+            )
         }
 
         // Check if the token is expired
         const hasExpired = new Date().getTime() > existingToken.expires.getTime();
         if (hasExpired) {
             console.error("Token has expired");
-            return NextResponse.redirect(
-                new URL("/auth/register?error=TokenExpired", request.nextUrl.origin)
-            );
+            return NextResponse.json(
+                { error: "Token has expired" },
+                { status: 410 }
+            )
         }
 
         //find the user
@@ -85,9 +90,11 @@ export async function POST(request: NextRequest) {
 
         if (!user) {
             console.error("User not found");
-            return NextResponse.redirect(
-                new URL("/auth/register?error=UserNotFound", request.nextUrl.origin)
-            );
+
+            return NextResponse.json(
+                { error: "User not found" },
+                { status: 404 }
+            )
         }
 
         //update the user
@@ -105,14 +112,18 @@ export async function POST(request: NextRequest) {
         await deleteVerificationToken(existingToken.identifier, token);
         console.log("Token deleted successfully");
         //redirect to signin
-        return NextResponse.redirect(new URL("/auth/signin?success=PasswordReset", request.nextUrl.origin));
-
+        return NextResponse.json(
+            { message: "Password changed successfully" },
+            { status: 200 }
+        )
 
     }
     catch (error) {
         console.error("Error during password change ", error);
-        return NextResponse.redirect(
-            new URL("/auth/signin?error=VerificationFailed", request.nextUrl.origin)
-        );
+        return NextResponse.json(
+            { error: "Error during password change" },
+            { status: 500 }
+        )
+        
     }
 }
