@@ -15,7 +15,6 @@ datasource db {
 
 enum UserRole {
   CUSTOMER
-  ORGANIZER
   ADMIN
 }
 
@@ -33,6 +32,7 @@ model User{
   //relations required by prisma nextauth.js
   accounts Account[]
   sessions Session[]
+  subscriptions Subscription[] // Added for subscriptions
 }
 
 
@@ -78,4 +78,28 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+
+model Subscription {
+  id String @id @default(cuid())
+  name String
+  cost Float
+  currency String // e.g. INR, USD
+  billingCycle String // e.g. monthly, yearly
+  category String // e.g. entertainment, education, work
+  folder String // e.g. for personal use, for work
+  notes String? // e.g. for personal use, for work
+  logo String? // e.g. logo URL
+
+  //link to user
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+
+}
 //export 

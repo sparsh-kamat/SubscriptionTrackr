@@ -52,6 +52,8 @@ const registerSchema = z
 // Infer the TypeScript type from the Zod schema
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
+//suspense boundary
+
 export default function RegisterPage() {
   // State for loading indicators
 
@@ -66,14 +68,13 @@ export default function RegisterPage() {
   // Effect to handle messages/errors passed via URL query parameters
   useEffect(() => {
     const error = searchParams?.get("error");
-    if (error === "UserNotFound"  ){
+    if (error === "UserNotFound") {
       toast.error("User Not Found", {
         description: "User not found. Please register.",
       });
       // Clean the URL search params without reloading the page
       window.history.replaceState(null, "", "/register"); // Adjust path if needed
-    }
-    else if (error) {
+    } else if (error) {
       toast.error("Registration Failed", {
         description: "An error occurred during registration. Please try again.",
       });
@@ -93,7 +94,7 @@ export default function RegisterPage() {
   });
 
   //handler for "sign up button"
-  const onCredentialsSubmit = async (values:RegisterFormValues) => {
+  const onCredentialsSubmit = async (values: RegisterFormValues) => {
     setIsLoadingCredentials(true);
     //log to console
     try {
@@ -102,6 +103,7 @@ export default function RegisterPage() {
         method: "POST",
         body: JSON.stringify({
           email: values.email,
+          //log to console
           name: values.name,
           password: values.password,
           confirmPassword: values.confirmPassword,
@@ -182,6 +184,7 @@ export default function RegisterPage() {
               {/* Email Field */}
               <FormField
                 control={form.control}
+                // placeholder="user@gmail.com"
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -201,6 +204,7 @@ export default function RegisterPage() {
               />
               {/* Name Field */}
               <FormField
+                // placeholder="App User"
                 control={form.control}
                 name="name"
                 render={({ field }) => (
@@ -222,6 +226,7 @@ export default function RegisterPage() {
               {/* Password Field */}
               <FormField
                 control={form.control}
+                // placeholder="••••••••"
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -243,6 +248,7 @@ export default function RegisterPage() {
               />
               {/* Confirm Password Field */}
               <FormField
+                // placeholder="••••••••"
                 control={form.control}
                 name="confirmPassword"
                 render={({ field }) => (

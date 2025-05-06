@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper"; // Import your session provider wrapper
 import { Toaster as SonnerToaster } from "@/components/ui/sonner"; // Import Sonner toaster (aliased to avoid name clash if needed)
 import { ThemeProvider } from "@/components/theme-provider"; // Import your theme provider
+import { Navbar } from "@/components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,8 +28,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SessionProviderWrapper>
+            <Navbar/>
+
             <main className="">{children}</main>
-            <SonnerToaster richColors position="top-right" />
+            <SonnerToaster richColors position="bottom-right" />
           </SessionProviderWrapper>
         </ThemeProvider>
       </body>
