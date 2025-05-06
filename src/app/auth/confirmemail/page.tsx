@@ -73,7 +73,7 @@ export default function ResetPassword() {
     //log to console
     try {
       console.log(JSON.stringify(form.getValues()));
-      const response = await fetch("/api/auth/confirmemail",{
+      const response = await fetch("/api/auth/confirmemail", {
         method: "POST",
         body: JSON.stringify({
           email: values.email,
@@ -96,7 +96,8 @@ export default function ResetPassword() {
       if (response.ok) {
         //change password success
         toast.success("Password reset link sent", {
-          description: "Check your email for the instructions to reset your password.",
+          description:
+            "Check your email for the instructions to reset your password.",
         });
         router.push("/auth/signin");
       } else {
@@ -121,13 +122,13 @@ export default function ResetPassword() {
 
   return (
     // Centering container
-    <div className="flex justify-center items-center min-h-screen bg-muted/40 ">
-      <Card className="w-full max-w-md shadow-md">
+    <div className="flex justify-center  pt-32 h-min bg-muted/40 ">
+      <Card className=" ml-5 mr-5  w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
           <CardDescription>
             Enter your email address to receive a password reset link.
-            </CardDescription>
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
           {/* Credentials Form */}

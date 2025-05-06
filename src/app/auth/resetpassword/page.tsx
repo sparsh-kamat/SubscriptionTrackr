@@ -121,10 +121,9 @@ export default function ResetPassword() {
         const errorData = await response.json();
         console.error("Error changing password:", errorData);
         toast.error("Password Change Failed", {
-          description: errorData.error || "An error occurred. Please try again.",
+          description:
+            errorData.error || "An error occurred. Please try again.",
         });
-      
-      
       }
     } catch (error) {
       // Handle network errors or other unexpected issues during fetch
@@ -142,8 +141,8 @@ export default function ResetPassword() {
 
   return (
     // Centering container
-    <div className="flex justify-center items-center min-h-screen bg-muted/40 ">
-      <Card className="w-full max-w-md shadow-md">
+    <div className="flex justify-center pt-32 h-min bg-muted/40 ">
+      <Card className=" ml-5 mr-5  w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Reset Password</CardTitle>
           <CardDescription className="text-sm text-muted-foreground">

@@ -161,8 +161,8 @@ export default function SignInPage() {
 
   return (
     // Centering container
-    <div className="flex justify-center items-center min-h-screen bg-muted/40  ">
-      <Card className="w-full max-w-md shadow-md">
+    <div className="flex justify-center  pt-32 h-min bg-muted/40 ">
+      <Card className=" ml-5 mr-5  w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
           <CardDescription className="text-muted-foreground">
