@@ -1,6 +1,6 @@
 // src/lib/prisma.ts
-import { PrismaClient } from "@prisma/client"; // Or your custom path
-
+// import { PrismaClient } from "../../node_modules/.prisma/client"; // Adjust the import path as necessary
+import { PrismaClient } from "@prisma/client"; // Import PrismaClient from the Prisma package
 console.log("[Prisma Client] Initializing..."); // Log initialization start
 
 const globalForPrisma = globalThis as unknown as {

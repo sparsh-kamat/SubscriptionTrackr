@@ -161,6 +161,24 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.SubscriptionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  cost: 'cost',
+  currency: 'currency',
+  billingCycle: 'billingCycle',
+  lastBillingDate: 'lastBillingDate',
+  nextBillingDate: 'nextBillingDate',
+  status: 'status',
+  category: 'category',
+  folder: 'folder',
+  notes: 'notes',
+  logo: 'logo',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -177,7 +195,6 @@ exports.Prisma.NullsOrder = {
 };
 exports.UserRole = exports.$Enums.UserRole = {
   CUSTOMER: 'CUSTOMER',
-  ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN'
 };
 
@@ -185,7 +202,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Account: 'Account',
   Session: 'Session',
-  VerificationToken: 'VerificationToken'
+  VerificationToken: 'VerificationToken',
+  Subscription: 'Subscription'
 };
 
 /**
