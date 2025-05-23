@@ -29,7 +29,7 @@ export function ThemeSwitch({ label = true }: ThemeSwitchProps) {
 
   return (
     <div className="flex items-center space-x-2">
-      <Switch id="theme-switch" checked={isDarkMode} onCheckedChange={handleChange} />
+      <Switch id="theme-switch" checked={isDarkMode} onCheckedChange={handleChange} aria-label="Toggle dark mode" />
       {label && (
         <Label htmlFor="theme-switch">
           {isDarkMode ? "Dark Mode" : "Light Mode"}

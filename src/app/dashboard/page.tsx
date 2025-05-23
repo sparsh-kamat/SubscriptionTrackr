@@ -1,11 +1,17 @@
 //boilerplate code placeholder
-"use client";
+import {auth} from "@/lib/auth";
+import { redirect } from "next/navigation";
+import SubcriptionDasboard from "@/components/dashboard/SubscriptionDashboard";
 
-export default function Dashboard() {
+
+export default async function Dashboard() {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-4xl font-bold">Welcome to TrackMySubs </h1>
-      <p className="mt-4 text-lg">Your all in one SubscriptionTracker</p>
-    </main>
+    <div className="flex w-full min-h-screen justify-evenly p-6 sm:pl-18 sm:pr-18 lg:pl-24 lg:pr-24 xl:pl-32 xl:pr-32">
+      <SubcriptionDasboard/>
+    </div>
   );
 }
