@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
+import { Suspense } from "react";
 // Shadcn UI components
 import { Button } from "@/components/ui/button";
 import {
@@ -41,13 +41,14 @@ const loginSchema = z.object({
 // Infer the TypeScript type from the Zod schema
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function SignInPage() {
+function SignInFormContent () {
   // State for loading indicators
   const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false);
 
   // Next.js hooks
   const router = useRouter();
+
   const searchParams = useSearchParams();
 
   // Effect to handle messages/errors passed via URL query parameters
@@ -278,5 +279,15 @@ export default function SignInPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  // Since useSearchParams is in SignInFormContent, we wrap that.
+  // If SignInPage itself used useSearchParams directly, we'd wrap its return.
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen">Loading page...</div>}>
+      <SignInFormContent />
+    </Suspense>
   );
 }

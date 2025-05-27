@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner"; // Use Sonner for toasts
 import { Icons } from "../../../components/icons";
+import { Suspense } from "react";
 //import { ThemeSwitch } from "@/components/custom/ThemeSwitch"
 
 // Zod schema for registration form validation
@@ -39,7 +40,7 @@ const confirmemailschemea = z.object({
 // Infer the TypeScript type from the Zod schema
 type confirmemailFormValues = z.infer<typeof confirmemailschemea>;
 
-export default function ResetPassword() {
+function ConfirmEmailForm() {
   // State for loading indicators
 
   const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -170,3 +171,17 @@ export default function ResetPassword() {
     </div>
   );
 } // End of RegisterPage component
+
+export default function ConfirmEmailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading page...
+        </div>
+      }
+    >
+      <ConfirmEmailForm />
+    </Suspense>
+  );
+}

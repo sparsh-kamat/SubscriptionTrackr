@@ -7,15 +7,17 @@ import { subscriptionSchema } from '@/lib/validations/subscription'; // We'll us
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const urlParameter = await params;
+    const subscriptionId = urlParameter.id;
     const session = await auth();
     if (!session?.user.id) {
         console.error("User not authenticated");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const subscriptionId = params.id;
+
 
     if (!subscriptionId) {
         return NextResponse.json({ error: "Subscription ID is required" }, { status: 400 });
@@ -44,15 +46,16 @@ export async function GET(
 
 export async function PUT(
     Request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const urlParameter = await params;
+    const subscriptionId = urlParameter.id;
 
     const session = await auth();
     if (!session?.user.id) {
         console.error("User not authenticated");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const subscriptionId = params.id;
     if (!subscriptionId) {
         return NextResponse.json({ error: "Subscription ID is required" }, { status: 400 });
     }
@@ -127,15 +130,16 @@ export async function PUT(
 
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
+    const urlParameter = await params;
+    const subscriptionId = urlParameter.id;
     const session = await auth();
     if (!session?.user.id) {
         console.error("User not authenticated");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const subscriptionId = params.id;
     if (!subscriptionId) {
         return NextResponse.json({ error: "Subscription ID is required" }, { status: 400 });
     }

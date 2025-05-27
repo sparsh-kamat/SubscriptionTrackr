@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner"; // Use Sonner for toasts
 import { Icons } from "../../../components/icons";
+import { Suspense } from "react";
+
 //import { ThemeSwitch } from "@/components/custom/ThemeSwitch"
 
 // Zod schema for registration form validation
@@ -52,9 +54,7 @@ const registerSchema = z
 // Infer the TypeScript type from the Zod schema
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-//suspense boundary
-
-export default function RegisterPage() {
+function RegisterFormContent() {
   // State for loading indicators
 
   const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -321,3 +321,19 @@ export default function RegisterPage() {
     </div>
   );
 } // End of RegisterPage component
+
+export default function RegisterPage() {
+  // Since useSearchParams is in SignInFormContent, we wrap that.
+  // If SignInPage itself used useSearchParams directly, we'd wrap its return.
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading page...
+        </div>
+      }
+    >
+      <RegisterFormContent />
+    </Suspense>
+  );
+}

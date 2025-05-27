@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner"; // Use Sonner for toasts
 import { Icons } from "../../../components/icons";
+import { Suspense } from "react";
 //import { ThemeSwitch } from "@/components/custom/ThemeSwitch"
 
 // Zod schema for registration form validation
@@ -46,7 +47,7 @@ const changePasswordSchema = z
 // Infer the TypeScript type from the Zod schema
 type changePasswordFormValues = z.infer<typeof changePasswordSchema>;
 
-export default function ResetPassword() {
+function ResetPasswordForm() {
   // State
 
   const [isLoadingCredentials, setIsLoadingCredentials] = useState(false);
@@ -213,3 +214,17 @@ export default function ResetPassword() {
     </div>
   );
 } // End of RegisterPage component
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading page...
+        </div>
+      }
+    >
+      <ResetPasswordForm />
+    </Suspense>
+  );
+}
