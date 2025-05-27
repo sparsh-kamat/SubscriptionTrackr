@@ -5,21 +5,16 @@ import { PlusCircle } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
+  CardDescription,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
+import SubsriptionList from "@/components/dashboard/SubscriptionList";
+import  SpendPieChart  from "./SpendCategoryPieChart";
+import RenewingSubscriptions from "./RenewingSubscriptions";
 
 export default function SubscriptionsDashboard() {
   return (
@@ -77,7 +72,7 @@ export default function SubscriptionsDashboard() {
         </Card>
         <Card className="gap-3">
           <CardHeader className="flex flex-row items-center justify-between ">
-            <CardTitle className="text-m font-medium">
+            <CardTitle >
               Upcoming Renewals
             </CardTitle>
           </CardHeader>
@@ -87,19 +82,45 @@ export default function SubscriptionsDashboard() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-7 h-90 p-4  w-full">
-        <Card className="lg:col-span-3 ">
+      <div className="grid gap-4 sm:grid-cols-1  md:grid-cols-5 lg:grid-cols-7  p-4  w-full">
+        <Card className="md:col-span-3 lg:col-span-4 ">
           {/* pie chart of spends by catergory */}
+          <CardHeader>
+            <CardTitle>Spending by Category</CardTitle>
+            <CardDescription>
+              Breakdown of your subscription spending
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SpendPieChart />
+          </CardContent>
         </Card>
-        <Card className="lg:col-span-4">
+        <Card className="lg:col-span-3 md:col-span-2">
           {/* Upcoming subcription payments */}
+          <CardHeader>
+            <CardTitle>Upcoming Renewals</CardTitle>
+            <CardDescription>Subscriptions renewing in the next 15 days</CardDescription>
+          </CardHeader>
+          <CardContent className="flex-grow overflow-y-auto md:max-h-[200px] lg:max-h-[225px] xl:max-h-[250px] hide-scrollbar-track">
+            <RenewingSubscriptions />
+          </CardContent>
         </Card>
       </div>
-      <div className=" flex p-4 min-h-3/6  w-full">
+      <div className=" flex p-4   w-full">
         <Card className="flex w-full ">
-          {/* Upcoming subcription payments */}
+          <CardHeader>
+            <CardTitle>Recent Subscriptions</CardTitle>
+            <CardDescription>Manage your active subscriptions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <SubsriptionList />
+          </CardContent>
+          <CardFooter>
+            <Link href="/subscriptions">
+              <Button variant="outline">View All</Button>
+            </Link>
+          </CardFooter>
 
-          <Table className=" flex min-h-60  w-full "></Table>
           {/* all subscriptions */}
         </Card>
       </div>

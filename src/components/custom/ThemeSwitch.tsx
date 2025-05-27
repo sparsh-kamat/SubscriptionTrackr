@@ -2,6 +2,8 @@
 
 import * as React from "react"
 import { useTheme } from "next-themes"
+//import sun and moon icons if needed
+import { Sun, Moon } from "lucide-react"
 
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
@@ -29,7 +31,11 @@ export function ThemeSwitch({ label = true }: ThemeSwitchProps) {
 
   return (
     <div className="flex items-center space-x-2">
+     {/* //add sun to left  */}
+      <Sun className={`h-5 w-5 ${isDarkMode ? "text-muted-foreground" : "text-yellow-500"}`} />
+      {/* //add moon to right */}
       <Switch id="theme-switch" checked={isDarkMode} onCheckedChange={handleChange} aria-label="Toggle dark mode" />
+      <Moon className={`h-5 w-5 ${isDarkMode ? "text-blue-500" : "text-muted-foreground"}`} />
       {label && (
         <Label htmlFor="theme-switch">
           {isDarkMode ? "Dark Mode" : "Light Mode"}

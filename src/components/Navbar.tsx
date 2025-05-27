@@ -29,7 +29,7 @@ export const Navbar = () => {
 
   //get only the first name from the user name
   return (
-    <nav className="sticky top-0 flex h-16 z-50 w-full border-b bg-background/95 backdrop:backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav className="sticky top-0 flex h-16 z-50 w-full border-b bg-background  ">
       <div className="ml-5 container flex  items-center">
         <Link href="/" className=" flex items-center space-x-2">
           <span className="font-bold inline-block  text-3xl  ">
