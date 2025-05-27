@@ -4,13 +4,11 @@ import { auth } from '@/lib/auth'; // Your auth setup
 import { prisma } from '@/lib/prisma';
 import { subscriptionSchema } from '@/lib/validations/subscription'; // We'll use this for PUT
 
-interface RouteContext {
-    params: {
-        id?: string;
-    };
-}
 
-export async function GET(request: NextRequest, { params }: RouteContext) {
+export async function GET(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
     const session = await auth();
     if (!session?.user.id) {
         console.error("User not authenticated");
@@ -44,7 +42,10 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 
 }
 
-export async function PUT(Request: NextRequest, { params }: RouteContext) {
+export async function PUT(
+    Request: NextRequest,
+    { params }: { params: { id: string } }
+) {
 
     const session = await auth();
     if (!session?.user.id) {
@@ -124,7 +125,10 @@ export async function PUT(Request: NextRequest, { params }: RouteContext) {
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteContext) {
+export async function DELETE(
+    request: NextRequest,
+    { params }: { params: { id: string } }
+) {
     const session = await auth();
     if (!session?.user.id) {
         console.error("User not authenticated");
