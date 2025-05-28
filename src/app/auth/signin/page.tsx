@@ -162,7 +162,7 @@ function SignInFormContent () {
 
   return (
     // Centering container
-    <div className="flex justify-center  pt-32 h-min bg-muted/40 ">
+    <div className="flex justify-center  pt-32  bg-muted/40 ">
       <Card className=" ml-5 mr-5  w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Welcome Back!</CardTitle>
