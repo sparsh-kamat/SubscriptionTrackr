@@ -7,12 +7,10 @@ export const subscriptionSchema = z.object({
   currency: z.string().min(1, { message: 'Currency is required' }),
   billingCycle: z.string().min(1, { message: 'Billing cycle is required' }),
   lastBillingDate: z.coerce.date({ errorMap: () => ({ message: 'Valid last billing date is required' }) }),
-  nextBillingDate: z.coerce.date({ errorMap: () => ({ message: 'Valid next billing date is required' }) }).optional().nullable(), // Matches Prisma DateTime?
   status: z.string().min(1, { message: 'Status is required' }),
   category: z.string().min(1, { message: 'Category is required' }),
   folder: z.string().min(1, { message: 'Folder is required' }),
-  notes: z.string().optional().nullable(),
-  logo: z.string().url({ message: 'Invalid URL for logo' }).optional().nullable(),
+  notes: z.string().optional()
 });
 
 export type SubscriptionFormData = z.infer<typeof subscriptionSchema>;
