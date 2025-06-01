@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface ThemeSwitchProps {
   label?: boolean;
@@ -42,12 +43,7 @@ export function ThemeSwitch({ label = true }: ThemeSwitchProps) {
     return (
       <div className="flex items-center space-x-2" aria-hidden="true">
         <Sun className="h-5 w-5 text-muted-foreground" />
-        <Switch
-          id="theme-switch-placeholder"
-          disabled // Visually indicates it's not interactive yet
-          checked={false} // Or a sensible default
-          aria-label="Toggle dark mode"
-        />
+        <Skeleton className="h-5 w-10" />
         <Moon className="h-5 w-5 text-muted-foreground" />
         {label && <Label htmlFor="theme-switch-placeholder">&nbsp;</Label>}
       </div>

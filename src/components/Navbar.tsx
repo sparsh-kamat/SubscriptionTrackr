@@ -53,7 +53,7 @@ export const Navbar = () => {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative  rounded-full">
+                <Button variant="ghost" className="relative  ">
                   <Avatar className="cursor-pointer">
                     <AvatarImage
                       src={session.user?.image ?? undefined}
@@ -72,9 +72,9 @@ export const Navbar = () => {
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="lucide lucide-chevron-down-icon lucide-chevron-down"
                   >
                     <path d="m6 9 6 6 6-6" />
@@ -88,7 +88,7 @@ export const Navbar = () => {
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="font-normal">
+                <DropdownMenuItem className="font-normal" onClick={() => signOut()}>
                   <Button
                     variant="ghost"
                     className=""

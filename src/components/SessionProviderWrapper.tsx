@@ -7,6 +7,7 @@ import React from "react";
 // Define the props type, accepting children
 interface Props {
   children: React.ReactNode;
+  className?: string; // Add className to the props
 }
 
 /**
@@ -16,11 +17,13 @@ interface Props {
  * within the root Server Component layout (layout.tsx) to provide
  * session context to the rest of the (client-side) application.
  */
-export default function SessionProviderWrapper({ children }: Props) {
+export default function SessionProviderWrapper({ children,className,}: Props) {
   return (
     // Render the actual SessionProvider from next-auth, passing children through
     <SessionProvider>
-      {children}
+       <div className={className}> {/* Apply the className here */}
+        {children}
+      </div>
     </SessionProvider>
   );
 }

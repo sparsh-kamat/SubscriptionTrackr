@@ -169,7 +169,7 @@ function RegisterFormContent() {
 
   return (
     // Centering container
-    <div className="flex justify-center  pt-32 h-min bg-muted/40 ">
+    <div className="flex flex-col flex-grow items-center justify-center bg-muted/40 px-4 py-4 ">
       <Card className=" ml-5 mr-5  w-full max-w-md shadow-md">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Registration</CardTitle>

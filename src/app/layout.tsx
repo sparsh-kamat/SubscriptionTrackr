@@ -27,10 +27,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SessionProviderWrapper>
-            <Navbar/>
+          <SessionProviderWrapper className="flex flex-col min-h-screen flex-grow">
+            <Navbar />
 
-            <main className="">{children}</main>
+            <main className=" flex flex-col flex-grow ">{children}</main>
             <SonnerToaster richColors position="bottom-right" />
           </SessionProviderWrapper>
         </ThemeProvider>
