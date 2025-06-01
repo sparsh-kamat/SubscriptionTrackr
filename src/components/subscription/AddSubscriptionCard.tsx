@@ -45,7 +45,6 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils"; // For conditional class names
 import { format } from "date-fns"; // For formatting dates
-import { Underdog } from "next/font/google";
 
 // You might want to define these lists centrally or fetch them if they become dynamic
 const billingCycles = ["Monthly", "Yearly", "Quarterly"]; // Add more as needed
