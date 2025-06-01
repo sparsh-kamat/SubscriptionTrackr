@@ -45,6 +45,7 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils"; // For conditional class names
 import { format } from "date-fns"; // For formatting dates
+import { Underdog } from "next/font/google";
 
 // You might want to define these lists centrally or fetch them if they become dynamic
 const billingCycles = ["Monthly", "Yearly", "Quarterly"]; // Add more as needed
@@ -63,7 +64,7 @@ export default function AddSubscriptionCard() {
       cost: 0,
       currency: "INR",
       billingCycle: "",
-      lastBillingDate: new Date(), // Default to current date
+      lastBillingDate: undefined, // Default to current date
       status: "Active",
       category: "",
       folder: "Default",
@@ -242,7 +243,6 @@ export default function AddSubscriptionCard() {
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
