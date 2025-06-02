@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
             new Date(lastBillingDate),
             billingCycle
         );
+        console.log("Next Billing Date:", nextBillingDate);
 
         const newSubscription = await prisma.subscription.create({// lowercase 's'
             data: {

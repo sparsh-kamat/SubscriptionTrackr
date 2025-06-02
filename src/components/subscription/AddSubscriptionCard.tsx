@@ -320,9 +320,11 @@ export default function AddSubscriptionCard() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-1/2" disabled={isLoading}>
+            <div className="flex w-full items-center justify-center">
+            <Button type="submit" className="w-1/2 " disabled={isLoading}>
               {isLoading ? "Adding..." : "Add Subscription"}
             </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

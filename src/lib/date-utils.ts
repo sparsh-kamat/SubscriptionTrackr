@@ -1,5 +1,5 @@
 // src/lib/date-utils.ts
-import { addMonths, addYears, lastDayOfMonth, setDate, getDate, getMonth,  } from 'date-fns'; // Use v3 imports
+import { addMonths, addYears, lastDayOfMonth, setDate, getDate, getMonth } from 'date-fns'; // Use v3 imports
 
 export function calculateNextBillingDate(
   lastBillingDate: Date,
@@ -13,7 +13,7 @@ export function calculateNextBillingDate(
   const lastBillDay = getDate(lastBillingDate); // Day of the month (1-31)
 
   switch (billingCycle.toUpperCase()) {
-    case "Monthly": {
+    case "MONTHLY": {
       let nextDate = addMonths(lastBillingDate, 1);
       const nextMonthLastDay = getDate(lastDayOfMonth(nextDate));
       // If the original day was, e.g., 31st, and next month only has 30 days,
@@ -33,7 +33,7 @@ export function calculateNextBillingDate(
       }
       return nextDate;
     }
-    case "Quarterly": {
+    case "QUARTERLY": {
       let nextDate = addMonths(lastBillingDate, 3);
       const nextQuarterMonthLastDay = getDate(lastDayOfMonth(nextDate));
       if (lastBillDay > nextQuarterMonthLastDay) {
@@ -48,8 +48,8 @@ export function calculateNextBillingDate(
       }
       return nextDate;
     }
-    case "Yearly": 
-    case "Annually": { // Handle variations
+    case "YEARLY":
+    case "ANNUALLY": { // Handle variations
       // addYears handles leap years correctly for Feb 29th.
       // If lastBillingDate was Feb 29 and next year is not a leap year, it becomes Feb 28.
       return addYears(lastBillingDate, 1);
