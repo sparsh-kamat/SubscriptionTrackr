@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma"; // Your shared Prisma client
 import { auth } from  "@/lib/auth"
 import { subscriptionSchema } from "@/lib/validations/subscription";
+import { calculateNextBillingDate } from "@/lib/date-utils";
 
 
 export async function POST(request: NextRequest) {
@@ -30,13 +31,17 @@ export async function POST(request: NextRequest) {
             currency,
             billingCycle,
             lastBillingDate,
-            nextBillingDate,
             status,
             category,
             folder,
             notes,
-            logo,
         } = validation.data
+
+        // Calculate next billing date based on the last billing date and billing cycle
+        const nextBillingDate = calculateNextBillingDate(
+            new Date(lastBillingDate),
+            billingCycle
+        );
 
         const newSubscription = await prisma.subscription.create({// lowercase 's'
             data: {
@@ -50,7 +55,6 @@ export async function POST(request: NextRequest) {
                 category,
                 folder,
                 notes,
-                logo,
                 userId: session.user.id,
             },
         });

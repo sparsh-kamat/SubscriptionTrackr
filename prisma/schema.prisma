@@ -95,7 +95,6 @@ model Subscription {
   category String // e.g. entertainment, education, work
   folder String // e.g. for personal use, for work
   notes String? // e.g. for personal use, for work
-  logo String? // e.g. logo URL
 
   //link to user
   userId String

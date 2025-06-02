@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { auth } from '@/lib/auth'; // Your auth setup
 import { prisma } from '@/lib/prisma';
 import { subscriptionSchema } from '@/lib/validations/subscription'; // We'll use this for PUT
-
+import { calculateNextBillingDate } from '@/lib/date-utils';
 
 export async function GET(
     request: NextRequest,
@@ -80,12 +80,10 @@ export async function PUT(
             currency,
             billingCycle,
             lastBillingDate,
-            nextBillingDate,
             status,
             category,
             folder,
             notes,
-            logo,
         } = validation.data;
 
         //check if the subscription exists
@@ -99,6 +97,12 @@ export async function PUT(
         if (!existingSubscription) {
             return NextResponse.json({ error: "Subscription not found" }, { status: 404 });
         }
+
+        // Calculate next billing date based on the last billing date and billing cycle
+        const nextBillingDate = calculateNextBillingDate(
+            new Date(lastBillingDate),
+            billingCycle
+        );
 
         const updatedSubscription = await prisma.subscription.update({
             where: {
@@ -115,8 +119,7 @@ export async function PUT(
                 status,
                 category,
                 folder,
-                notes,
-                logo,
+                notes
             },
         });
 
