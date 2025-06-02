@@ -42,7 +42,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "@/components/calendar";
 import { cn } from "@/lib/utils"; // For conditional class names
 import { format } from "date-fns"; // For formatting dates
 
