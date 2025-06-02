@@ -71,63 +71,6 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-muted/50"></div>
       </section>
 
-      {/* Features Section */}
-      {/* <section className=" w-full h-fit   px-8 sm:px-6 lg:px-8 py-12 sm:py-16 bg-muted/50">
-        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">
-          Why Choose Underground Tix?
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2  gap-8 items-center justify-center ">
-          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="h-6 w-6 text-purple-600" />
-                Instant Tracking
-              </CardTitle>
-              <CardDescription>
-                Automatically track all your subscriptions in one place.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Eye className="h-6 w-6 text-blue-600" />
-                Full Visibility
-              </CardTitle>
-              <CardDescription>
-                See all your recurring expenses at a glance.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Star className="h-6 w-6 text-yellow-600" />
-                Premium Features
-              </CardTitle>
-              <CardDescription>
-                Unlock advanced features with our premium plan.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          
-
-          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingDown className="h-6 w-6 text-orange-600" />
-                Save Money
-              </CardTitle>
-              <CardDescription>
-                Identify and cancel unused subscriptions to save money.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </div>
-      </section> */}
       <section
         id="features"
         className="w-full flex justify-center items-center  "
@@ -145,8 +88,8 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="mx-auto  grid max-w-5xl items-center justify-content gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 place-items-center lg:place-items-stretch py-12">
+            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xs lg:w-full">
               <CardHeader>
                 <Eye className="h-10 w-10 text-primary mb-1" />
                 <CardTitle>Complete Visibility</CardTitle>
@@ -157,7 +100,7 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xs lg:w-full">
               <CardHeader>
                 <Smartphone className="h-10 w-10 text-primary mb-1" />
                 <CardTitle>Mobile & Desktop</CardTitle>
@@ -167,7 +110,7 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
             </Card>
-            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+            <Card className="h-full md:col-span-2  lg:col-span-1 w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xs lg:w-full">
               <CardHeader>
                 <CreditCard className="h-10 w-10 text-primary mb-1" />
                 <CardTitle>Easy Setup</CardTitle>

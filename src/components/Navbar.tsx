@@ -32,8 +32,8 @@ export const Navbar = () => {
     <nav className="sticky top-0 flex h-16 z-50 w-full border-b bg-background  ">
       <div className="ml-5 container flex  items-center">
         <Link href="/" className=" flex items-center space-x-2">
-          <span className="font-bold inline-block  text-3xl  ">
-            TrackMySubs
+          <span className="font-bold inline-block  text-2xl text-pretty  ">
+            SubscriptionTrackr
           </span>
         </Link>
       </div>
