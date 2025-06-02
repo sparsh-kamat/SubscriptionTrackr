@@ -1,11 +1,234 @@
-
+"use client";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  ArrowRight,
+  Eye,
+  Smartphone,
+  CreditCard,
+  Github,
+  CheckCircle,
+} from "lucide-react";
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between ">
-      <h1 className="text-4xl font-bold">Welcome to Underground Tix</h1>
-      <p className="mt-4 text-lg">Your underground show hub</p>
-      {/* Add more content here */}
-    </main>
+    <div className="flex flex-col flex-grow items-center min-h-dvh  bg-muted/40  ">
+      {/* Hero Section */}
+      {/* Hero Section */}
+      <section className="flex flex-grow h-screen  w-full items-center justify-center  ">
+        <div className=" relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto text-center items-center justify-center flex flex-col ">
+            {/* Badge */}
+
+            {/* Main heading */}
+            <h1 className="mb-6 sm:mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-tight">
+              Take Control of Your{" "}
+              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
+                Subscriptions
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="   sm:text-lg md:text-xl  text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
+              Stop losing track of Netflix, Spotify, gym memberships, and all
+              those autopay subscriptions. Get complete visibility and control
+              over your recurring expenses.
+            </p>
+
+            {/* CTA Button */}
+            <div className="mb-8 sm:mb-10">
+              <Button
+                size="lg"
+                className="h-12 sm:h-14 px-8 sm:px-10 text-base sm:text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                <h3 className=" ">Start Tracking Free</h3>
+                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+              </Button>
+            </div>
+
+            {/* Trust indicators */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm sm:text-base text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
+                <span>Free forever plan</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
+                <span>No credit card required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* seperator */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-muted/50"></div>
+      </section>
+
+      {/* Features Section */}
+      {/* <section className=" w-full h-fit   px-8 sm:px-6 lg:px-8 py-12 sm:py-16 bg-muted/50">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">
+          Why Choose Underground Tix?
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2  gap-8 items-center justify-center ">
+          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-6 w-6 text-purple-600" />
+                Instant Tracking
+              </CardTitle>
+              <CardDescription>
+                Automatically track all your subscriptions in one place.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Eye className="h-6 w-6 text-blue-600" />
+                Full Visibility
+              </CardTitle>
+              <CardDescription>
+                See all your recurring expenses at a glance.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Star className="h-6 w-6 text-yellow-600" />
+                Premium Features
+              </CardTitle>
+              <CardDescription>
+                Unlock advanced features with our premium plan.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+
+          
+
+          <Card className="max-w-2xl bg-muted/50 hover:bg-muted/60 transition-colors duration-300">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingDown className="h-6 w-6 text-orange-600" />
+                Save Money
+              </CardTitle>
+              <CardDescription>
+                Identify and cancel unused subscriptions to save money.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </section> */}
+      <section
+        id="features"
+        className="w-full flex justify-center items-center  "
+      >
+        <div className="container justify-center items-center px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              <Badge variant="secondary">Features</Badge>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                Never Lose Track Again
+              </h2>
+              <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                From streaming services to gym memberships, house help to
+                internet bills - keep everything organized and under control.
+              </p>
+            </div>
+          </div>
+          <div className="mx-auto  grid max-w-5xl items-center justify-content gap-6 py-12 lg:grid-cols-3 lg:gap-12">
+            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+              <CardHeader>
+                <Eye className="h-10 w-10 text-primary mb-1" />
+                <CardTitle>Complete Visibility</CardTitle>
+                <CardDescription>
+                  See all your subscriptions in one dashboard. No more forgotten
+                  autopay charges or surprise bills.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+              <CardHeader>
+                <Smartphone className="h-10 w-10 text-primary mb-1" />
+                <CardTitle>Mobile & Desktop</CardTitle>
+                <CardDescription>
+                  Access your subscription dashboard anywhere. Responsive Web
+                  UI.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card className="h-full w-xs bg-muted/50 hover:bg-muted/60 transition-colors duration-300 md:w-xl lg:w-full">
+              <CardHeader>
+                <CreditCard className="h-10 w-10 text-primary mb-1" />
+                <CardTitle>Easy Setup</CardTitle>
+                <CardDescription>
+                  Just login and start adding! No credit card required for the
+                  free plan.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
+        <p className="text-xs text-muted-foreground">
+          © 2025 SusbscriptionTrackr. All rights reserved.
+        </p>
+        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+          
+          <Link 
+            href="https://github.com/sparsh-kamat"
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {/* add made with love by */}
+            <span>Made with ❤️ by</span>
+            <Github className="h-3 w-3" />
+            <span>Sparsh Kamat</span>
+          </Link>
+        </nav>
+      </footer>
+
+      <style jsx>{`
+        @keyframes gradient-x {
+          0%,
+          100% {
+            background-size: 200% 200%;
+            background-position: left center;
+          }
+          50% {
+            background-size: 200% 200%;
+            background-position: right center;
+          }
+        }
+
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+
+        .animation-delay-2000 {
+          animation-delay: 1s;
+        }
+
+        .animation-delay-4000 {
+          animation-delay: 1s;
+        }
+
+        .animate-gradient-x {
+          animation: gradient-x 3s ease infinite;
+        }
+      `}</style>
+    </div>
   );
 }
