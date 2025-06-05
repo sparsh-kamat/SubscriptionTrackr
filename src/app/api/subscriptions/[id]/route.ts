@@ -99,7 +99,7 @@ export async function PUT(
         }
 
         // Calculate next billing date based on the last billing date and billing cycle
-        const nextBillingDate = calculateNextBillingDate(
+        const calulatedNextBillingDate = calculateNextBillingDate(
             new Date(lastBillingDate),
             billingCycle
         );
@@ -114,8 +114,8 @@ export async function PUT(
                 cost,
                 currency,
                 billingCycle,
-                lastBillingDate,
-                nextBillingDate,
+                lastBillingDate: new Date(lastBillingDate),
+                nextBillingDate: calulatedNextBillingDate || undefined,
                 status,
                 category,
                 folder,
