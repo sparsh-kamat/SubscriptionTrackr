@@ -89,7 +89,7 @@ model Subscription {
   //last billing date
   lastBillingDate DateTime
   //next billing date
-  nextBillingDate DateTime?
+  nextBillingDate DateTime
   //status of the subscription
   status String // e.g. active, inactive, cancelled
   category String // e.g. entertainment, education, work
