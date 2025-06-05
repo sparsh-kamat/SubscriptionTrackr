@@ -6,6 +6,7 @@ import SessionProviderWrapper from "@/components/SessionProviderWrapper"; // Imp
 import { Toaster as SonnerToaster } from "@/components/ui/sonner"; // Import Sonner toaster (aliased to avoid name clash if needed)
 import { ThemeProvider } from "@/components/theme-provider"; // Import your theme provider
 import { Navbar } from "@/components/Navbar";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -34,6 +36,7 @@ export default function RootLayout({
             <SonnerToaster richColors position="bottom-right" />
           </SessionProviderWrapper>
         </ThemeProvider>
+        <SpeedInsights/>
       </body>
     </html>
   );
