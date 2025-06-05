@@ -38,11 +38,11 @@ export async function POST(request: NextRequest) {
         } = validation.data
 
         // Calculate next billing date based on the last billing date and billing cycle
-        const nextBillingDate = calculateNextBillingDate(
+        const calculatedNextBillingDate = calculateNextBillingDate(
             new Date(lastBillingDate),
             billingCycle
         );
-        console.log("Next Billing Date:", nextBillingDate);
+        console.log("Next Billing Date:", calculatedNextBillingDate);
 
         const newSubscription = await prisma.subscription.create({// lowercase 's'
             data: {
@@ -50,9 +50,9 @@ export async function POST(request: NextRequest) {
                 cost,
                 currency,
                 billingCycle,
-                lastBillingDate,
-                nextBillingDate,
-                status,
+                lastBillingDate: new Date(lastBillingDate), // Ensure this is a Date object
+                nextBillingDate: calculatedNextBillingDate || new Date(lastBillingDate), // Use the calculated next billing date or fallback
+                status, // Default to 'active' if not provided
                 category,
                 folder,
                 notes,
