@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SubscriptionTrackr 📈
 
-## Getting Started
+A modern, full-stack application designed to help you effortlessly track and manage your recurring subscriptions. Get a clear overview of your monthly and yearly spending with an interactive dashboard.
 
-First, run the development server:
+[](https://www.google.com/search?q=https://subsciptiontrackr.vercel.app/)
+[](https://opensource.org/licenses/MIT)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Live Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Check out the live application hosted on Vercel:
+**[https://subsciptiontrackr.vercel.app/](https://www.google.com/search?q=https://subsciptiontrackr.vercel.app/)**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![ScreenRecording2025-06-08at4 26 04AM-ezgif com-cut](https://github.com/user-attachments/assets/84938ccb-1c51-4edd-84ce-a1b2e52b6541)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Key Features
 
-## Learn More
+  * **Secure User Authentication:** Sign up and log in using email/password credentials or social providers like Google. Built with **NextAuth.js (Auth.js v5)**.
+  * **Full CRUD Functionality:** Easily **C**reate, **R**ead, **U**pdate, and **D**elete your subscriptions.
+  * **Interactive Dashboard:** A central hub to visualize your spending with key metrics:
+      * Total Monthly & Yearly Cost calculations.
+      * Active subscription count.
+      * Upcoming renewal alerts.
+  * **Spending Visualization:** A dynamic pie chart shows your spending distribution by category.
+  * **Automated Date Logic:** The "Next Billing Date" is automatically calculated based on the last billing date and the selected billing cycle, including handling complex month-end scenarios.
+  * **Modern & Responsive UI:** Built with **shadcn/ui** and **Tailwind CSS**, offering a clean, modern interface that works on all devices.
+  * **Dark/Light Mode:** A theme toggle with an animated icon to switch between light and dark modes, with user preference saved via `next-themes`.
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is built with a modern, full-stack TypeScript setup:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  * **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+  * **Language:** [TypeScript](https://www.typescriptlang.org/)
+  * **UI:** [React 19](https://react.dev/), [shadcn/ui](https://ui.shadcn.com/), [Tailwind CSS](https://tailwindcss.com/)
+  * **Database ORM:** [Prisma](https://www.prisma.io/)
+  * **Database:** [PostgreSQL](https://www.postgresql.org/) (hosted on [Supabase](https://supabase.com/))
+  * **Authentication:** [NextAuth.js (Auth.js v5)](https://authjs.dev/)
+  * **Form Management:** [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/) for validation
+  * **Charting:** [Recharts](https://recharts.org/)
+  * **Deployment:** [Vercel](https://vercel.com/)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
