@@ -1,13 +1,13 @@
 import { CalendarClock } from "lucide-react"
 // Sample data - in a real app, this would come from your database
 const upcomingRenewals = [
-  // {
-  //   id: "1",
-  //   name: "Netflix",
-  //   amount: 15.99,
-  //   date: "2025-05-28",
-  //   logo: "/placeholder.svg",
-  // },
+  {
+    id: "1",
+    name: "Netflix",
+    amount: 15.99,
+    date: "2025-05-28",
+    logo: "/placeholder.svg",
+  },
   // {
   //   id: "2",
   //   name: "Spotify",

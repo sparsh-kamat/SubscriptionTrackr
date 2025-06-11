@@ -15,7 +15,6 @@ import Link from "next/link";
 import SubsriptionList from "@/components/dashboard/SubscriptionList";
 import  SpendPieChart  from "./SpendCategoryPieChart";
 import RenewingSubscriptions from "./RenewingSubscriptions";
-import ShiningButton from "../animata/button/shining-button";
 
 export default function SubscriptionsDashboard() {
   return (
@@ -26,11 +25,10 @@ export default function SubscriptionsDashboard() {
         </div>
         <div className="flex items-center justify-end gap-4 ">
           <Link href="/add">
-          <ShiningButton />
-            {/* <Button className="gap-1 ">
+            <Button className="gap-1 ">
               <PlusCircle className="h-4 w-4" />
               Add Subscription
-            </Button> */}
+            </Button>
           </Link>
         </div>
       </div>
