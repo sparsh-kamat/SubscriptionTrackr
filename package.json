@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:update-rates": "tsx scripts/update-rates.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.0",
@@ -44,6 +45,7 @@
     "recharts": "^2.15.3",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.2.8",
     "uuidv4": "^6.2.13",
     "zod": "^3.24.3"
@@ -57,10 +59,13 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/uuid": "^10.0.0",
+    "dotenv": "^16.5.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
     "prisma": "^6.6.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.1",
     "typescript": "^5"
   },
   "overrides": {

@@ -1,51 +1,57 @@
 import { CalendarClock } from "lucide-react"
 // Sample data - in a real app, this would come from your database
 const upcomingRenewals = [
-  {
-    id: "1",
-    name: "Netflix",
-    amount: 15.99,
-    date: "2025-05-28",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "2",
-    name: "Spotify",
-    amount: 9.99,
-    date: "2025-05-30",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "3",
-    name: "Adobe Creative Cloud",
-    amount: 52.99,
-    date: "2025-06-02",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "4",
-    name: "Adobe Creative Cloud",
-    amount: 52.99,
-    date: "2025-06-02",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "5",
-    name: "Adobe Creative Cloud",
-    amount: 52.99,
-    date: "2025-06-02",
-    logo: "/placeholder.svg",
-  },
+  // {
+  //   id: "1",
+  //   name: "Netflix",
+  //   amount: 15.99,
+  //   date: "2025-05-28",
+  //   logo: "/placeholder.svg",
+  // },
+  // {
+  //   id: "2",
+  //   name: "Spotify",
+  //   amount: 9.99,
+  //   date: "2025-05-30",
+  //   logo: "/placeholder.svg",
+  // },
+  // {
+  //   id: "3",
+  //   name: "Adobe Creative Cloud",
+  //   amount: 52.99,
+  //   date: "2025-06-02",
+  //   logo: "/placeholder.svg",
+  // },
+  // {
+  //   id: "4",
+  //   name: "Adobe Creative Cloud",
+  //   amount: 52.99,
+  //   date: "2025-06-02",
+  //   logo: "/placeholder.svg",
+  // },
+  // {
+  //   id: "5",
+  //   name: "Adobe Creative Cloud",
+  //   amount: 52.99,
+  //   date: "2025-06-02",
+  //   logo: "/placeholder.svg",
+  // },
 ]
 export default function RenewingSubscriptions() {
   return (
     <div >
       {upcomingRenewals.length === 0 ? (
-        <div className="flex h-[200px] flex-col items-center justify-center rounded-md border border-dashed p-8 text-center">
-          <CalendarClock className="h-10 w-10 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">No upcoming renewals</h3>
-          <p className="mt-2 text-sm text-muted-foreground">You don&apos;t have any subscriptions renewing soon.</p>
-        </div>
+          // --- UPGRADED EMPTY STATE ---
+          <div className="flex h-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/30 p-8 text-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+              <CalendarClock className="h-10 w-10 text-muted-foreground" />
+            </div>
+            <h3 className="mt-6 text-lg font-semibold">All Clear!</h3>
+            <p className="mt-2 text-center text-sm text-muted-foreground">
+              You don&apos;t have any subscriptions renewing soon.
+            </p>
+          </div>
+
       ) : (
         upcomingRenewals.map((renewal) => (
           <div key={renewal.id} className="flex items-center justify-between  space-y-2">

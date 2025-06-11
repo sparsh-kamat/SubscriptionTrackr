@@ -50,7 +50,26 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+@layer utilities {
+  .bg-striped {
+    background-image: repeating-linear-gradient(45deg, #3B3A3D, #3B3A3D 5px, transparent 5px, transparent 20px);
+  }
+  
+  .animate-blink-red {
+    animation: blink-red 2s infinite linear;
+  }
+}
 
+@keyframes blink-red {
+  0%, 100% {
+    background-color: rgba(239, 68, 68, 0.7);
+    box-shadow: 0 0 30px 10px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.5);  
+    box-shadow: 0 0 30px 10px rgba(239, 68, 68, 1);
+  }
+}
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
