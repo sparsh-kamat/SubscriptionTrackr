@@ -5,6 +5,8 @@ import { getDaysRemaining } from "@/lib/subscription-utils";
 import { type Subscription } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
+import { getExchangeRates } from "@/lib/currency";
+
 interface UpcomingRenewal extends Subscription {
     daysUntilRenewal: number | null; // Days until the next billing date, null if not applicable
 }
@@ -22,7 +24,6 @@ interface DashboardData {
     upcomingRenewals: UpcomingRenewal[];
     categorySpending: CategorySpending[];
     recentSubscriptions: Subscription[];
-    categorywiseSpending: CategorySpending[];
 }
 
 export async function GET() {
@@ -36,14 +37,26 @@ export async function GET() {
 
         //Step by step, we will fetch the data from the database and perform calculations
         const userId = session.user.id;
-        const fetchedSubscriptions = await prisma.subscription.findMany({
-            where: { userId },
-            orderBy: { createdAt: "desc" },
-        });
+        // const fetchedSubscriptions = await prisma.subscription.findMany({
+        //     where: { userId },
+        //     orderBy: { createdAt: "desc" },
+        // });
 
+        const [fetchedSubscriptions, exchangeRates] = await Promise.all([
+            prisma.subscription.findMany({
+                where: { userId },
+                orderBy: { createdAt: "desc" },
+            }),
+            getExchangeRates(), // Fetch exchange rates
+        ]);
+
+        //if no rates are found, return an error
+        if (!exchangeRates) {
+            return NextResponse.json({ error: "Failed to fetch exchange rates." }, { status: 500 });
+        }
+
+        //filter out subscriptions that are not active
         const activeSubscriptions = fetchedSubscriptions.filter((sub: Subscription) => sub.status?.toLowerCase() === "active");
-
-
         //if there are no active subscriptions, return null
         if (activeSubscriptions.length === 0) {
             return NextResponse.json({ message: "No active subscriptions found." }, { status: 200 });
@@ -53,11 +66,20 @@ export async function GET() {
         // Calculate total monthly and yearly costs, active subscriptions, and upcoming renewals
         let totalMonthlyCost = 0;
         let totalYearlyCost = 0;
-
+        const spendingByCategory: { [key: string]: number } = {};
 
         activeSubscriptions.forEach((sub: Subscription) => {
-            totalMonthlyCost += calculateNormalizedMonthlyCost(sub.cost, sub.billingCycle);
-            totalYearlyCost += calculateNormalizedYearlyCost(sub.cost, sub.billingCycle);
+            const originalCost = sub.cost.toNumber(); // Convert Decimal to number
+            // Convert cost to the user's preferred currency if needed
+            const convertedCost = originalCost * (exchangeRates[sub.currency] || 1); // Fallback to 1 if rate not found
+
+            totalMonthlyCost += calculateNormalizedMonthlyCost(convertedCost, sub.billingCycle);
+            totalYearlyCost += calculateNormalizedYearlyCost(convertedCost, sub.billingCycle);
+
+            if (sub.category) {
+                const normalizedCost = calculateNormalizedYearlyCost(convertedCost, sub.billingCycle);
+                spendingByCategory[sub.category] = (spendingByCategory[sub.category] || 0) + normalizedCost;
+            }
         });
 
         //total active subscriptions
@@ -84,17 +106,10 @@ export async function GET() {
 
         const numberOfUpcomingRenewals = upcomingRenewals.length;
 
-        const recentSubscriptions = fetchedSubscriptions.slice(0, 5);
+        const calculatedRecentSubscriptions = fetchedSubscriptions.slice(0, 5);
+
 
         // Calculate category spending
-        const spendingByCategory: { [key: string]: number } = {};
-        activeSubscriptions.forEach((sub: Subscription) => {
-            if (sub.category) {
-                const normalizedCost = calculateNormalizedYearlyCost(sub.cost, sub.billingCycle);
-                spendingByCategory[sub.category] = (spendingByCategory[sub.category] || 0) + normalizedCost;
-            }
-        });
-
         const categorySpending: CategorySpending[] = Object.entries(spendingByCategory).map(([name, value]) => ({
             name,
             value,
@@ -107,9 +122,8 @@ export async function GET() {
             activeSubscriptions: totalActiveSubscriptions,
             numberOfUpcomingRenewals,
             upcomingRenewals,
-            categorySpending,
-            recentSubscriptions,
-            categorywiseSpending: categorySpending,
+            categorySpending : categorySpending,
+            recentSubscriptions: calculatedRecentSubscriptions,
         };
 
         // Return the dashboard data as JSON response
