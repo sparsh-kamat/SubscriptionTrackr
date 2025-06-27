@@ -1,7 +1,7 @@
 // File: src/components/subscription/AddSubscriptionCard.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,14 +45,27 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/calendar";
 import { cn } from "@/lib/utils"; // For conditional class names
 import { format } from "date-fns"; // For formatting dates
-
+import { type Subscription } from "@prisma/client";
+import { on } from "events";
 // You might want to define these lists centrally or fetch them if they become dynamic
 const billingCycles = ["Monthly", "Yearly", "Quarterly"]; // Add more as needed
 const currencies = ["USD", "INR", "EUR", "GBP"]; // Example currencies
 const categories = ["Entertainment", "Utilities", "Subscriptions", "Others"]; // Example categories
 const folders = ["Work", "Personal", "Default", "Other"]; // Example folders
 
-export default function AddSubscriptionCard() {
+interface SubscriptionFormCardProps {
+  subscriptionToEdit?: Subscription | null; // Optional prop for editing an existing subscription
+  onSuccess: () => void; // Callback for successful submission
+  onClose?: () => void; // Callback to close the form, if needed
+}
+
+export default function AddSubscriptionCard({
+  subscriptionToEdit,
+  onSuccess,
+  onClose,
+}: SubscriptionFormCardProps) {
+  const isEditMode = !!subscriptionToEdit; // Check if we are in edit mode
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false); // For form submission loading state
 
@@ -71,14 +84,32 @@ export default function AddSubscriptionCard() {
     },
   });
 
+  // If editing, set the form values to the subscriptionToEdit data
+  useEffect(() => {
+    if (isEditMode && subscriptionToEdit) {
+      // Use form.reset to update all fields
+      form.reset({
+        ...subscriptionToEdit,
+        cost: Number(subscriptionToEdit.cost), // Convert Decimal to number for the form
+        lastBillingDate: new Date(subscriptionToEdit.lastBillingDate),
+        notes: subscriptionToEdit.notes || "", // Ensure notes is a string
+      });
+    }
+  }, [isEditMode, subscriptionToEdit, form]);
+
   //   http://localhost:3000/api/subscriptions post
   const onSubmit = async (data: SubscriptionFormData) => {
     console.log("Current form errors:", form.formState.errors);
 
     setIsLoading(true);
+    const url = isEditMode
+      ? `/api/subscriptions/${subscriptionToEdit?.id}`
+      : "/api/subscriptions";
+    const method = isEditMode ? "PUT" : "POST"; // Use PUT for editing, POST for adding
+
     try {
-      const response = await fetch("/api/subscriptions", {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,15 +117,27 @@ export default function AddSubscriptionCard() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add subscription");
+        throw new Error(
+          `Failed to ${isEditMode ? "update" : "add"} subscription`
+        );
       }
 
       const result = await response.json();
       console.log("Subscription added:", result);
       // Show success toast and redirect
-      toast.success("Subscription added successfully!");
-      router.push("/dashboard");
-      router.refresh(); // Redirect to the subscriptions page or wherever you want
+      toast.success(
+        `Subscription successfully ${isEditMode ? "updated" : "added"}!`
+      );
+      onSuccess(); // Call the success callback
+
+      if (!isEditMode) {
+        router.push("/dashboard");
+        router.refresh(); // Redirect to the subscriptions page or wherever you want
+      }
+      // If you have a close callback, you can call it here
+      if (onClose) {
+        onClose(); // Close the form if a callback is provided
+      }
     } catch (error) {
       console.error("Error adding subscription:", error);
       toast.error("Failed to add subscription. Please try again.");
@@ -107,9 +150,13 @@ export default function AddSubscriptionCard() {
     // Centering container
     <Card className=" ml-5 mr-5  max-w-xl  shadow-md">
       <CardHeader className="">
-        <CardTitle className="text-2xl ">Add Subscription</CardTitle>
+        <CardTitle className="text-2xl ">
+          {isEditMode ? "Edit" : "Add"} Subscription
+        </CardTitle>
         <CardDescription>
-          Fill in the details below to add a new subscription.
+          {isEditMode
+            ? "Update the details of your subscription."
+            : "Add a new subscription to your tracker."}
         </CardDescription>
       </CardHeader>
 
@@ -320,10 +367,26 @@ export default function AddSubscriptionCard() {
                 </FormItem>
               )}
             />
-            <div className="flex w-full items-center justify-center">
-            <Button type="submit" className="w-1/2 " disabled={isLoading}>
-              {isLoading ? "Adding..." : "Add Subscription"}
-            </Button>
+            <div className="flex justify-end gap-2 pt-4">
+              {onClose && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  disabled={isLoading}
+                >
+                  Cancel
+                </Button>
+              )}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading
+                  ? isEditMode
+                    ? "Updating..."
+                    : "Adding..."
+                  : isEditMode
+                  ? "Update Subscription"
+                  : "Add Subscription"}
+              </Button>
             </div>
           </form>
         </Form>

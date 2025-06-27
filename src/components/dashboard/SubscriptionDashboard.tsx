@@ -11,13 +11,14 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import Link from "next/link";
-
+import AddSubscriptionCard from "@/components/subscription/AddSubscriptionCard";
 import SubsriptionList from "@/components/dashboard/SubscriptionList";
 import SpendPieChart from "./SpendCategoryPieChart";
 import RenewingSubscriptions from "./RenewingSubscriptions";
 import { useEffect, useState } from "react";
 
 import { type DashboardData } from "@/app/api/dashboard/route";
+import { type Subscription } from "@prisma/client";
 
 //loading skeleton for  dashboard
 import { Skeleton } from "../ui/skeleton";
@@ -66,31 +67,54 @@ export default function SubscriptionsDashboard() {
     null
   );
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      setIsError(null);
+  
+  // State to manage which subscription is currently being edited
+  const [editingSubscription, setEditingSubscription] = useState<Subscription | null>(null);
 
-      try {
-        const response = await fetch("/api/dashboard");
-        if (!response.ok) {
-          const errData = await response.json();
-          throw new Error(errData.error || "Failed to fetch dashboard data");
-        }
-        const data: DashboardData = await response.json();
-        setDashboardData(data);
-        //log
-        console.log("Dashboard Data:", data);
-      } catch (error) {
-        if (error instanceof Error) setIsError(error.message);
-        else setIsError("an unknown problem occured ");
-        console.log(error);
-      } finally {
-        setIsLoading(false);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setIsError(null);
+
+    try {
+      const response = await fetch("/api/dashboard");
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Failed to fetch dashboard data");
       }
-    };
+      const data: DashboardData = await response.json();
+      setDashboardData(data);
+      //log
+      console.log("Dashboard Data:", data);
+    } catch (error) {
+      if (error instanceof Error) setIsError(error.message);
+      else setIsError("an unknown problem occured ");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
+
+
+  // Handler to set the subscription to be edited, which opens the form modal
+  const handleEdit = (subscription: Subscription) => {
+    setEditingSubscription(subscription);
+  };
+
+  // Handler to close the edit form modal
+  const handleCloseForm = () => {
+    setEditingSubscription(null);
+  };
+
+  // This function is called when a subscription is successfully deleted, added, or updated
+  const handleSuccess = () => {
+    setEditingSubscription(null); // Close the form if it was open
+    fetchData(); // And refresh all the dashboard data
+  };
 
   // 1. While loading, show a skeleton or loading state
   if (isLoading) return <DashboardSkeleton />;
@@ -113,6 +137,7 @@ export default function SubscriptionsDashboard() {
   // 3. If there's no data show a welcome/empty state
   if (!dashboardData || dashboardData.activeSubscriptions === 0) {
     return (
+      
       <Card className="flex flex-col border w-full items-center gap-4 p-6 text-center">
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold">Welcome to Your Dashboard</h1>
@@ -132,6 +157,20 @@ export default function SubscriptionsDashboard() {
   }
 
   return (
+    <>
+
+     {/* If a subscription is being edited, show the form in a modal overlay */}
+     {editingSubscription && (
+         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="w-full max-w-md">
+                <AddSubscriptionCard 
+                    subscriptionToEdit={editingSubscription}
+                    onSuccess={handleSuccess}
+                    onClose={handleCloseForm}
+                />
+            </div>
+         </div>
+      )}
     <Card className="flex flex-col border  w-full items-center gap-0 p-0 ">
       <div className=" flex flex-col sm:flex-row h-fit justify-between  w-full p-4">
         <div className="flex items-center gap-4 ">
@@ -195,6 +234,8 @@ export default function SubscriptionsDashboard() {
           <CardContent>
             <SubsriptionList
               recentSubscriptions={dashboardData.recentSubscriptions}
+              onSubscriptionDeleted={fetchData} // Re-fetch data after deletion
+              onEditSubscription={handleEdit} // Pass the edit handler
             />
           </CardContent>
           <CardFooter>
@@ -207,5 +248,6 @@ export default function SubscriptionsDashboard() {
         </Card>
       </div>
     </Card>
+    </>
   );
 }
