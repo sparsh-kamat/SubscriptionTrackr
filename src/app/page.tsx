@@ -17,45 +17,47 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {HexagonBackground} from "@/components/animate-ui/backgrounds/hexagon"
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-grow items-center min-h-dvh  bg-muted/40  ">
+    <div className="flex flex-col flex-grow items-center min-h-dvh   ">
       {/* Hero Section */}
       {/* Hero Section */}
       <section className="flex flex-grow h-screen  w-full items-center justify-center  ">
-        <div className=" relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+      <HexagonBackground className="absolute inset-0 z-10" />
+        <div className=" relative  container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto text-center items-center justify-center flex flex-col ">
             {/* Badge */}
 
             {/* Main heading */}
-            <h1 className="mb-6 sm:mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-tight">
+            <h1 className=" z-10 mb-6 sm:mb-8 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-tight">
               Take Control of Your{" "}
-              <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
+              <span className=" z-10 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient-x">
                 Subscriptions
               </span>
             </h1>
 
             {/* Description */}
-            <p className="   sm:text-lg md:text-xl  text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
+            <p className="  z-10 sm:text-lg md:text-xl  text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto">
               Stop losing track of Netflix, Spotify, gym memberships, and all
               those autopay subscriptions. Get complete visibility and control
               over your recurring expenses.
             </p>
 
             {/* CTA Button */}
-            <div className="mb-8 sm:mb-10">
+            <div className="z-10 mb-8 sm:mb-10">
               <Button
                 size="lg"
-                className="h-12 sm:h-14 px-8 sm:px-10 text-base sm:text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                className=" z-10 h-12 sm:h-14 px-8 sm:px-10 text-base sm:text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
               >
-                <h3 className=" ">Start Tracking Free</h3>
+                <h3 className=" z-10">Start Tracking Free</h3>
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm sm:text-base text-muted-foreground">
+            <div className=" z-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm sm:text-base text-muted-foreground">
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                 <span>Free forever plan</span>

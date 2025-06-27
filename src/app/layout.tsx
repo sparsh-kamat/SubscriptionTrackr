@@ -10,6 +10,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics} from "@vercel/analytics/react"; // Import Vercel Analytics
 const inter = Inter({ subsets: ["latin"] });
 
+
 export const metadata: Metadata = {
   title: "Underground Tix App",
   description: "Your underground show hub",
@@ -32,7 +33,7 @@ export default function RootLayout({
         >
           <SessionProviderWrapper className="flex flex-col min-h-screen flex-grow">
             <Navbar />
-
+            
             <main className=" flex flex-col flex-grow ">{children}</main>
             <SonnerToaster richColors position="bottom-right" />
           </SessionProviderWrapper>
