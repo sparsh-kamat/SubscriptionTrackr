@@ -3,7 +3,6 @@
 // import { useState, useEffect } from "react";
 // import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,55 +19,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { type Subscription } from "@prisma/client";
 
-const recentSubscriptions = [
-  {
-    id: "1",
-    name: "Netflix",
-    category: "Entertainment",
-    amount: 15.99,
-    billingCycle: "Monthly",
-    nextPayment: "2025-05-28",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "2",
-    name: "Spotify",
-    category: "Entertainment",
-    amount: 9.99,
-    billingCycle: "Monthly",
-    nextPayment: "2025-05-30",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "3",
-    name: "Adobe Creative Cloud",
-    category: "Productivity",
-    amount: 52.99,
-    billingCycle: "Monthly",
-    nextPayment: "2025-06-02",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "4",
-    name: "Amazon Prime",
-    category: "Shopping",
-    amount: 14.99,
-    billingCycle: "Monthly",
-    nextPayment: "2025-06-10",
-    logo: "/placeholder.svg",
-  },
-  {
-    id: "5",
-    name: "Disney+",
-    category: "Entertainment",
-    amount: 7.99,
-    billingCycle: "Monthly",
-    nextPayment: "2025-06-15",
-    logo: "/placeholder.svg",
-  },
-];
-export default function SubsriptionList() {
+export default function SubsriptionList(
+  { recentSubscriptions }: { recentSubscriptions: Subscription[] } = { recentSubscriptions: [] } // Default to an empty array if no subscriptions are provided
+) {
   return (
     <Table className=" w-full">
       <TableHeader>
@@ -85,19 +40,19 @@ export default function SubsriptionList() {
         {recentSubscriptions.map((subscription) => (
             <TableRow key={subscription.id}>
                 <TableCell className="flex items-center gap-2">
-                <Image
+                {/* <Image
                     src={subscription.logo}
                     alt={`${subscription.name} logo`}
                     width={32}
                     height={32}
                     className="h-8 w-8 rounded"
-                />
+                /> */}
                 {subscription.name}
                 </TableCell>
                 <TableCell>{subscription.category}</TableCell>
-                <TableCell>${subscription.amount.toFixed(2)}</TableCell>
+                <TableCell>{subscription.currency +" " +subscription.cost}</TableCell>
                 <TableCell>{subscription.billingCycle}</TableCell>
-                <TableCell>{new Date(subscription.nextPayment).toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(subscription.nextBillingDate).toLocaleDateString()}</TableCell>
                 <TableCell>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
