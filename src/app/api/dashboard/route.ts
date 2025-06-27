@@ -6,6 +6,8 @@ import { type Subscription } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 import { getExchangeRates } from "@/lib/currency";
+import { startOfMonth } from "date-fns";
+import { date } from "zod";
 
 interface UpcomingRenewal extends Subscription {
     daysUntilRenewal: number | null; // Days until the next billing date, null if not applicable
@@ -16,7 +18,7 @@ interface CategorySpending {
     value: number;
 }
 
-interface DashboardData {
+export interface DashboardData {
     totalMonthlyCost: number;
     totalYearlyCost: number;
     activeSubscriptions: number;
@@ -24,6 +26,16 @@ interface DashboardData {
     upcomingRenewals: UpcomingRenewal[];
     categorySpending: CategorySpending[];
     recentSubscriptions: Subscription[];
+    // Total Monthly Cost ,Active Subscriptions, Annual Spending, Upcoming Renewals is top cards
+    topCards: {
+        totalMonthlyCost: number;
+        monthlyCostChange: number; // This can be calculated if needed
+        activeSubscriptions: number;
+        activeSubscriptionsChange: number; // This can be calculated if needed
+        totalYearlyCost: number;
+        numberOfUpcomingRenewals: number;
+
+    };
 }
 
 export async function GET() {
@@ -55,6 +67,13 @@ export async function GET() {
             return NextResponse.json({ error: "Failed to fetch exchange rates." }, { status: 500 });
         }
 
+
+        //current date/time 
+        const now_server = new Date();
+        const startOfCurrentMonth = startOfMonth(now_server);
+        const fifteenDaysFromNow = new Date(now_server.getTime() + 15 * 24 * 60 * 60 * 1000);
+
+
         //filter out subscriptions that are not active
         const activeSubscriptions = fetchedSubscriptions.filter((sub: Subscription) => sub.status?.toLowerCase() === "active");
         //if there are no active subscriptions, return null
@@ -62,10 +81,15 @@ export async function GET() {
             return NextResponse.json({ message: "No active subscriptions found." }, { status: 200 });
         }
 
+        const activeSubsLastMonth = activeSubscriptions.filter((sub: Subscription) => new Date(sub.createdAt) < startOfCurrentMonth);
+
 
         // Calculate total monthly and yearly costs, active subscriptions, and upcoming renewals
         let totalMonthlyCost = 0;
+        let totalMonthlyCostChange = 0; // This can be calculated if needed
         let totalYearlyCost = 0;
+        let activeSubscriptionsChange = activeSubscriptions.length - activeSubsLastMonth.length; // Change in active subscriptions compared to last month
+
         const spendingByCategory: { [key: string]: number } = {};
 
         activeSubscriptions.forEach((sub: Subscription) => {
@@ -82,13 +106,23 @@ export async function GET() {
             }
         });
 
+        // Calculate total monthly cost change
+        if (activeSubsLastMonth.length > 0) {
+            const lastMonthTotal = activeSubsLastMonth.reduce((acc, sub) => {
+                const originalCost = sub.cost.toNumber();
+                const convertedCost = originalCost * (exchangeRates[sub.currency] || 1);
+                return acc + calculateNormalizedMonthlyCost(convertedCost, sub.billingCycle);
+            }, 0);
+            totalMonthlyCostChange = totalMonthlyCost - lastMonthTotal;
+        }
+        else {
+            totalMonthlyCostChange = totalMonthlyCost; // If no previous subscriptions, change is equal to current
+        }
+
         //total active subscriptions
         const totalActiveSubscriptions = activeSubscriptions.length;
 
         // Get upcoming renewals
-        //current date/time 
-        const now_server = new Date();
-        const fifteenDaysFromNow = new Date(now_server.getTime() + 15 * 24 * 60 * 60 * 1000);
 
         const upcomingRenewals = activeSubscriptions
             .filter((sub: Subscription) => {
@@ -122,8 +156,16 @@ export async function GET() {
             activeSubscriptions: totalActiveSubscriptions,
             numberOfUpcomingRenewals,
             upcomingRenewals,
-            categorySpending : categorySpending,
+            categorySpending: categorySpending,
             recentSubscriptions: calculatedRecentSubscriptions,
+            topCards: {
+                totalMonthlyCost,
+                activeSubscriptions: totalActiveSubscriptions,
+                monthlyCostChange: totalMonthlyCostChange, // Format to 2 decimal places
+                activeSubscriptionsChange: activeSubscriptionsChange,
+                totalYearlyCost,
+                numberOfUpcomingRenewals,
+            },
         };
 
         // Return the dashboard data as JSON response
