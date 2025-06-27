@@ -154,7 +154,9 @@ export default function SubscriptionsDashboard() {
         totalYearlyCost={dashboardData.totalYearlyCost}
         upcomingRenewalsCount={dashboardData.numberOfUpcomingRenewals}
         monthlyCostChange={dashboardData.topCards.monthlyCostChange}
-        activeSubscriptionsChange={dashboardData.topCards.activeSubscriptionsChange}
+        activeSubscriptionsChange={
+          dashboardData.topCards.activeSubscriptionsChange
+        }
       />
       <div className="grid gap-4 sm:grid-cols-1  md:grid-cols-5 lg:grid-cols-7  p-4  w-full">
         <Card className="md:col-span-3 lg:col-span-4 ">
@@ -166,7 +168,7 @@ export default function SubscriptionsDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <SpendPieChart />
+            <SpendPieChart data={dashboardData.categorySpending} />
           </CardContent>
         </Card>
         <Card className="lg:col-span-3 md:col-span-2">
@@ -178,7 +180,9 @@ export default function SubscriptionsDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex-grow overflow-y-auto md:max-h-[200px] lg:max-h-[225px] xl:max-h-[250px] hide-scrollbar-track">
-            <RenewingSubscriptions upcomingRenewals={dashboardData.upcomingRenewals} />
+            <RenewingSubscriptions
+              upcomingRenewals={dashboardData.upcomingRenewals}
+            />
           </CardContent>
         </Card>
       </div>
@@ -189,7 +193,9 @@ export default function SubscriptionsDashboard() {
             <CardDescription>Manage your active subscriptions</CardDescription>
           </CardHeader>
           <CardContent>
-            <SubsriptionList />
+            <SubsriptionList
+              recentSubscriptions={dashboardData.recentSubscriptions}
+            />
           </CardContent>
           <CardFooter>
             <Link href="/subscriptions">

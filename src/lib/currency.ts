@@ -42,3 +42,13 @@ export const getExchangeRates = unstable_cache(
     tags: ['rates'], // Optional: tags for on-demand revalidation if needed later
   }
 );
+
+
+export const formatCurrency = (amount: number, currency: string) => {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+}
