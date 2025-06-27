@@ -80,7 +80,6 @@ export async function POST(request: Request) {
 
     await sendVerificationEmail(email, tokenGenerated);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = newUser;
 
     return NextResponse.json({

@@ -46,7 +46,6 @@ import { Calendar } from "@/components/calendar";
 import { cn } from "@/lib/utils"; // For conditional class names
 import { format } from "date-fns"; // For formatting dates
 import { type Subscription } from "@prisma/client";
-import { on } from "events";
 // You might want to define these lists centrally or fetch them if they become dynamic
 const billingCycles = ["Monthly", "Yearly", "Quarterly"]; // Add more as needed
 const currencies = ["USD", "INR", "EUR", "GBP"]; // Example currencies

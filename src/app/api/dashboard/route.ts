@@ -87,7 +87,7 @@ export async function GET() {
         let totalMonthlyCost = 0;
         let totalMonthlyCostChange = 0; // This can be calculated if needed
         let totalYearlyCost = 0;
-        let activeSubscriptionsChange = activeSubscriptions.length - activeSubsLastMonth.length; // Change in active subscriptions compared to last month
+        const activeSubscriptionsChange = activeSubscriptions.length - activeSubsLastMonth.length; // Change in active subscriptions compared to last month
 
         const spendingByCategory: { [key: string]: number } = {};
 
