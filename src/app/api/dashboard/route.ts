@@ -77,7 +77,24 @@ export async function GET() {
         const activeSubscriptions = fetchedSubscriptions.filter((sub: Subscription) => sub.status?.toLowerCase() === "active");
         //if there are no active subscriptions, return null
         if (activeSubscriptions.length === 0) {
-            return NextResponse.json({ message: "No active subscriptions found." }, { status: 200 });
+            const emptyDashboardData: DashboardData = {
+                totalMonthlyCost: 0,
+                totalYearlyCost: 0,
+                activeSubscriptions: 0,
+                numberOfUpcomingRenewals: 0,
+                upcomingRenewals: [],
+                categorySpending: [],
+                recentSubscriptions: fetchedSubscriptions.slice(0, 5), // Can still show all (inactive) subscriptions
+                topCards: {
+                    totalMonthlyCost: 0,
+                    monthlyCostChange: 0,
+                    activeSubscriptions: 0,
+                    activeSubscriptionsChange: 0,
+                    totalYearlyCost: 0,
+                    numberOfUpcomingRenewals: 0,
+                },
+            };
+            return NextResponse.json(emptyDashboardData, { status: 200 });
         }
 
         const activeSubsLastMonth = activeSubscriptions.filter((sub: Subscription) => new Date(sub.createdAt) < startOfCurrentMonth);

@@ -10,7 +10,7 @@ export default async function Dashboard() {
     redirect("/auth/signin");
   }
   return (
-    <div className="flex w-full min-h-screen justify-evenly p-6 sm:pl-18 sm:pr-18 lg:pl-24 lg:pr-24 xl:pl-32 xl:pr-32">
+    <div className="flex w-full justify-evenly p-6 sm:pl-18 sm:pr-18 lg:pl-24 lg:pr-24 xl:pl-32 xl:pr-32">
       <SubcriptionDasboard/>
     </div>
   );

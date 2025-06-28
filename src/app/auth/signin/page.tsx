@@ -122,7 +122,7 @@ function SignInFormContent () {
         // Success! Redirect to dashboard or the page the user was trying to access
         // const session = await getSession();
         // console.log("Session started:", session);
-        const callbackUrl = searchParams?.get("callbackUrl") || "/";
+        const callbackUrl = searchParams?.get("callbackUrl") || "/dashboard";
         // if (session) {
         router.push(callbackUrl);
         // }
