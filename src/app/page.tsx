@@ -47,6 +47,7 @@ export default function Home() {
 
             {/* CTA Button */}
             <div className="z-10 mb-8 sm:mb-10">
+              <Link href="/dashboard" className="z-10">
               <Button
                 size="lg"
                 className=" z-10 h-12 sm:h-14 px-8 sm:px-10 text-base sm:text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
@@ -54,6 +55,7 @@ export default function Home() {
                 <h3 className=" z-10">Start Tracking Free</h3>
                 <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
+              </Link>
             </div>
 
             {/* Trust indicators */}
