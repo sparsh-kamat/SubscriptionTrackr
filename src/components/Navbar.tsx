@@ -82,13 +82,10 @@ export const Navbar = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuItem className="font-normal">
-                  <Button variant="ghost" className="">
-                    Profile
-                  </Button>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="font-normal" onClick={() => signOut()}>
+                <DropdownMenuItem
+                  className="font-normal"
+                  onClick={() => signOut()}
+                >
                   <Button
                     variant="ghost"
                     className=""
@@ -125,16 +122,23 @@ export const Navbar = () => {
               {session ? (
                 <nav className="flex flex-col space-y-4 mt-6">
                   <SheetClose asChild>
-                    <Button variant="ghost" className="w-full">
-                      Dashboard
+                    <Link href="/dashboard" className="w-full">
+                      <Button variant="ghost" className="w-full">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link href="/add" className="w-full">
+                    <Button
+                      variant="ghost"
+                      className="w-full"
+                    >
+                      Add Subscription
                     </Button>
+                    </Link>
                   </SheetClose>
 
-                  <SheetClose asChild>
-                    <Button variant="ghost" className="w-full">
-                      Profile
-                    </Button>
-                  </SheetClose>
                   <SheetClose asChild>
                     <Button
                       variant="ghost"

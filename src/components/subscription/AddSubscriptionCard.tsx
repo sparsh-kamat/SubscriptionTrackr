@@ -49,7 +49,21 @@ import { type Subscription } from "@prisma/client";
 // You might want to define these lists centrally or fetch them if they become dynamic
 const billingCycles = ["Monthly", "Yearly", "Quarterly"]; // Add more as needed
 const currencies = ["USD", "INR", "EUR", "GBP"]; // Example currencies
-const categories = ["Entertainment", "Utilities", "Subscriptions", "Others"]; // Example categories
+// Updated and expanded list of categories
+const categories = [
+  "Streaming", 
+  "Software", 
+  "Gaming", 
+  "Utilities", 
+  "Health & Fitness", 
+  "Education", 
+  "Shopping", 
+  "Cloud Storage", 
+  "Productivity", 
+  "News & Media",
+  "Music",
+  "Other"
+];
 const folders = ["Work", "Personal", "Default", "Other"]; // Example folders
 
 interface SubscriptionFormCardProps {
